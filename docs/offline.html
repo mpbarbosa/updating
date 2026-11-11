@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Offline · Updating</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f6cbd">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<!-- Styles are inline on purpose: this page has to render with no network and
+     no assumptions about what else made it into the cache. -->
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #f3f3f3; --card: #ffffff; --br: rgba(0,0,0,.058);
+    --ink: #1b1b1b; --ink-2: #5d5d5d; --accent: #0f6cbd;
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 10px rgba(0,0,0,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --bg: #1e1e1e; --card: #2b2b2b; --br: rgba(255,255,255,.068);
+      --ink: #f4f4f4; --ink-2: #c4c4c4; --accent: #4cc2ff;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.28);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: grid; place-items: center; padding: 1.5rem;
+    background: var(--bg); color: var(--ink);
+    font-family: "Segoe UI Variable Text", "Segoe UI", Inter, system-ui,
+                 -apple-system, Roboto, "Helvetica Neue", sans-serif;
+    line-height: 1.55;
+  }
+  .card {
+    width: 100%; max-width: 30rem;
+    background: var(--card); border: 1px solid var(--br);
+    border-radius: 10px; box-shadow: var(--shadow); padding: 1.75rem;
+  }
+  .badge {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%;
+    display: grid; place-items: center; margin-bottom: 1rem;
+    background: linear-gradient(145deg, #0f6cbd, #7a5af0);
+    color: #fff; font-weight: 600; font-size: .95rem; letter-spacing: .02em;
+  }
+  h1 { margin: 0 0 .4rem; font-size: 1.22rem; letter-spacing: -.01em; }
+  p { margin: 0 0 1rem; color: var(--ink-2); font-size: .9rem; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  li + li { margin-top: .15rem; }
+  a { color: var(--accent); text-decoration: none; font-size: .9rem; }
+  a:hover { text-decoration: underline; }
+  .sep { height: 1px; background: var(--br); margin: 1.25rem 0 1rem; }
+  .foot { font-size: .8rem; margin: 1rem 0 0; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge" aria-hidden="true">UP</div>
+    <h1>You are offline</h1>
+    <p>That page has not been saved to this device. Anything you have opened
+      before is still here, and the board itself is kept offline on purpose.</p>
+    <div class="sep"></div>
+    <ul>
+      <li><a href="./">The board</a></li>
+      <li><a href="sources.html">All sources</a></li>
+      <li><a href="karpathy.html">Andrej Karpathy — source index</a></li>
+      <li><a href="dan-moore.html">Dan Moore — source index</a></li>
+    </ul>
+    <p class="foot">Links out to the writers' own sites will need a connection.</p>
+  </div>
+</body>
+</html>

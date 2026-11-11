@@ -12,6 +12,16 @@
 <meta property="og:description" content="Independent reading indexes of the people worth following: cadence, canonical writing, and the feeds that are actually worth subscribing to.">
 <meta property="og:url" content="https://mpbarbosa.github.io/updating/sources.html">
 <meta name="twitter:card" content="summary">
+<!-- Installable: manifest, icons and the iOS standalone metas -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f6cbd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1e1e1e" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Updating">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -127,5 +137,30 @@
     <p>Source: <a href="https://github.com/mpbarbosa/updating">github.com/mpbarbosa/updating</a>.</p>
   </footer>
 </div>
+<script>
+/* Register the service worker: it takes the whole site offline and is what
+   makes the site installable. Nothing here is required for the page to work —
+   every failure path is silent and leaves an ordinary web page behind. */
+(function () {
+  "use strict";
+  if (!("serviceWorker" in navigator)) return;
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("service-worker.js").then(function (reg) {
+      reg.addEventListener("updatefound", function () {
+        var next = reg.installing;
+        if (!next) return;
+        next.addEventListener("statechange", function () {
+          /* A new version is ready. Activate it, but do not reload the page:
+             pages are served network-first, so what is on screen is already
+             current, and nobody wants a page to jump while they are reading. */
+          if (next.state === "installed" && navigator.serviceWorker.controller) {
+            next.postMessage({ type: "SKIP_WAITING" });
+          }
+        });
+      });
+    }).catch(function () { /* offline, unsupported, or blocked — no matter */ });
+  });
+})();
+</script>
 </body>
 </html>
