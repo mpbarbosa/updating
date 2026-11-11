@@ -1,0 +1,38 @@
+{
+  "name": "Updating — sources worth following",
+  "short_name": "Updating",
+  "description": "A board of the people worth reading to stay current: what is newest, how often each one posts, which feeds to subscribe to, and what to discount.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3f3f3",
+  "theme_color": "#0f6cbd",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["news", "productivity", "books"],
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "All sources",
+      "short_name": "Sources",
+      "description": "Every source assessed, with the verdict and the feeds",
+      "url": "./sources.html"
+    }
+  ],
+  "prefer_related_applications": false
+}

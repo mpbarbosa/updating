@@ -32,10 +32,43 @@ world, so that I can stay up to date.
 - `docs/sources.html` — the reading hub: every source assessed, with the verdict and the feeds
 - `docs/<source>.html` — one page per source
 - `docs/style.css` — shared styles for the hub and the source pages
+- `docs/manifest.webmanifest`, `docs/service-worker.js`, `docs/offline.html`,
+  `docs/icon-*.png`, `docs/favicon.svg` — the installable/offline layer
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
 first, and what to discount.
+
+## Installable and offline
+
+The site is a progressive web app: it can be installed to a home screen or
+desktop, and every page is readable with no connection. There is still no build
+step and no dependency — the manifest and the service worker are two more static
+files in `docs/`.
+
+The service worker precaches the whole site (about 180 KB including the icons)
+and then serves:
+
+- **navigations** network-first, so a revised board always wins when you are online
+- **stylesheets, images, icons** stale-while-revalidate — instant, and self-healing
+- **Google Fonts** cache-first, so offline does not fall back to a different typeface
+- **everything else** straight to the network, uncached
+
+Same-origin requests deliberately bypass the *browser's* HTTP cache. Without
+that, network-first is a lie: GitHub Pages serves HTML with `max-age=600`, so
+`fetch()` hands back a ten-minute-old page without touching the network and the
+service worker stores that as its idea of fresh. One cache layer is enough, and
+it should be the one with the version stamp on it.
+
+**When you change anything in `docs/`, bump `CACHE_VERSION` at the top of
+`docs/service-worker.js`.** That is what evicts the previous cache outright.
+Forgetting it is not fatal — navigations are network-first and assets revalidate
+behind the scenes, so the cost is at most one stale load — but it is the one
+piece of upkeep the PWA layer adds.
+
+Caching is live on `localhost` too, so it can be tested the same way it runs in
+production. While editing, use DevTools → Application → Service Workers →
+*Bypass for network*, or just reload twice.
 
 ## Previewing locally
 
