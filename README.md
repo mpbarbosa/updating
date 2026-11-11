@@ -25,9 +25,13 @@ world, so that I can stay up to date.
 ## Layout
 
 - `docs/` — the published GitHub Pages site (source: `main` branch, `/docs` folder)
-- `docs/index.html` — the hub: every source assessed, with the verdict and the feeds
+- `docs/index.html` — the home page: a board of tiles, Windows-widgets style, showing what
+  is newest across every source, the feeds, the cadence and what to watch out for. Filter
+  box, light/dark toggle and copy-the-feed-URL buttons; no build step, no dependencies
+- `docs/home.css` — styles for the home page only
+- `docs/sources.html` — the reading hub: every source assessed, with the verdict and the feeds
 - `docs/<source>.html` — one page per source
-- `docs/style.css` — shared styles for every page
+- `docs/style.css` — shared styles for the hub and the source pages
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
