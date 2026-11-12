@@ -270,6 +270,7 @@ a { color: var(--accent); text-underline-offset: 2px; }
 .src-dot { width: 0.55rem; height: 0.55rem; border-radius: 3px; flex: none; }
 .src-dot.dm { background: #c2563f; }
 .src-dot.ak { background: #5a7fd6; }
+.src-dot.bl { background: #b4863c; }
 .flag {
   font-size: 0.64rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--warn); background: var(--warn-soft);

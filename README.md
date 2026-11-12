@@ -11,6 +11,7 @@ world, so that I can stay up to date.
 | --- | --- | --- |
 | Dan Moore | Worth following, with a filter. 159 posts on FusionAuth's blog since 2020, two thirds of it dev-rel work worth skipping — but since 2025 a fortnightly stream of long explainers on OAuth, identity standards and agent authorization. No per-author feed. | [index](docs/dan-moore.html) |
 | Andrej Karpathy | Deep, slow. 11 posts in 2025, 3 in 2026. Two live blogs with separate feeds. Excellent for understanding, poor for news. | [index](docs/karpathy.html) |
+| Bright Lights Film Journal | Worth following, by subject. A film journal from 1974, online since 1995, 2,928 articles deep and publishing an essay every three days — but zero reviews, festival reports or news in all of 2026. Feeds for every category and author, all working. 74 articles this year from 61 different writers, and the masthead's own critics have stopped filing. | [index](docs/brightlights.html) |
 
 ## Feeds worth subscribing to
 
@@ -21,6 +22,11 @@ world, so that I can stay up to date.
   blog: filter on `<author>Dan Moore</author>`, and note it is missing three of his 2026 posts
 - `https://www.mooreds.com/wordpress/feed` — his personal blog; monthly, and a different
   subject entirely (engineering management and careers, no identity)
+- `https://brightlightsfilm.com/category/essays/feed/` — the Bright Lights label that tracks
+  what the journal is actually doing: 19 of its 74 articles this year. Any category works
+  (`/category/<slug>/feed/`), as does any author (`/author/<slug>/feed/`)
+- `https://brightlightsfilm.com/feed/` — the whole journal, ten items deep. Fine for a daily
+  reader, lossy if you check in monthly; prefer a category feed
 
 ## Layout
 
