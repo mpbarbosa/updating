@@ -359,6 +359,9 @@ a { color: var(--accent); text-underline-offset: 2px; }
   padding: 0 0.2rem;
 }
 .board > footer p { max-width: 58ch; }
+.board > footer .me { color: var(--ink-2); max-width: none; }
+.board > footer .me a { font-weight: 600; text-decoration: none; }
+.board > footer .me a:hover { text-decoration: underline; }
 
 .empty {
   display: none;
