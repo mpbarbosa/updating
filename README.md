@@ -16,9 +16,18 @@ world, so that I can stay up to date.
 
 ## Feeds worth subscribing to
 
-- `https://karpathy.bearblog.dev/feed/` — Karpathy's primary blog
+- `https://karpathy.bearblog.dev/feed/` — Karpathy's primary blog. Ten items, which is
+  years of cover at his rate — but it has already lost all three March 2025 posts, so
+  count from the archive index at `karpathy.bearblog.dev/blog/`, not from the feed
 - `https://karpathy.github.io/feed.xml` — his older blog, active again as of Feb 2026
-- `https://github.com/karpathy.atom` — repository activity
+- `https://github.com/karpathy/<repo>/commits/master.atom` — what he is building.
+  **Not** `github.com/karpathy.atom`: that is a valid feed with zero entries, stamped
+  2018, and it will never tell you anything
+- `https://www.youtube.com/feeds/videos.xml?channel_id=UCXUPKJO5MZQN11PqgIvyuvQ` — his
+  channel, which the page's own table omitted. High value, and dormant since Feb 2025
+- `https://karpathy.medium.com/feed` — the Medium archive, finished in Nov 2017 with
+  *Software 2.0*. The web pages answer 403 to an automated reader; the feed answers 200.
+  Read it, don't subscribe
 - `https://fusionauth.io/blog/feed.xml` — carries Dan Moore, but it is the whole company
   blog, and it carries every one of his posts. Match on *contains* `Dan Moore`, not equals:
   three posts are co-authored and the feed writes the whole byline into one `<author>` tag
@@ -56,6 +65,7 @@ world, so that I can stay up to date.
 - `tools/krugman-figures.py` — re-measures every number on the Krugman page
   against its sources (see *Checking the figures*)
 - `tools/dan-moore-figures.py` — the same for the Dan Moore page
+- `tools/karpathy-figures.py` — the same for the Karpathy page
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
@@ -99,7 +109,7 @@ script to change what a card says.
 
 Every source page states counts, medians and dates, and every one of them was read
 from the source's own API rather than recalled. Those numbers go stale, and a stale
-number on a page about staying current is the worst kind. Two pages have a script
+number on a page about staying current is the worst kind. Three pages have a script
 that re-reads their sources:
 
 ```
@@ -108,6 +118,10 @@ python3 tools/krugman-figures.py --as-of 2026-11-12
 
 ```
 python3 tools/dan-moore-figures.py --as-of 2026-11-13
+```
+
+```
+python3 tools/karpathy-figures.py --as-of 2026-11-13
 ```
 
 The first walks the Substack archive, re-fetches every feed the page lists —
@@ -123,10 +137,16 @@ both a real slug and a missing one. `--words` adds a fetch per post to re-measur
 the medians, `--links` checks that every post the page recommends still resolves,
 and `--cache FILE` saves the walk.
 
+The third reads both of his blogs' archive indexes rather than their feeds, because
+both feeds are ten items deep and the Bear blog's has already dropped the March 2025
+posts — a script measuring the feed would under-report the year and look right doing
+it. It also prints each channel's **content type**, since `karpathy.ai/feed.xml` and
+`x.com/karpathy/rss` both answer `200` with `text/html`.
+
 Reconcile by eye, and pass `--as-of` the cutoff in the page's footer or the
 year-to-date numbers will not line up.
 
-Stdlib only, no build step, and neither writes anything into `docs/`.
+Stdlib only, no build step, and none of them writes anything into `docs/`.
 
 Both print a little more than the page states, on purpose. Where a figure needs a
 judgement — which short Krugman posts are day-off notices, which FusionAuth
