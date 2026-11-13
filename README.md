@@ -55,6 +55,7 @@ world, so that I can stay up to date.
 - `tools/make-og-cards.py` — regenerates those cards (see *Search and sharing*)
 - `tools/krugman-figures.py` — re-measures every number on the Krugman page
   against its sources (see *Checking the figures*)
+- `tools/dan-moore-figures.py` — the same for the Dan Moore page
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
@@ -98,20 +99,40 @@ script to change what a card says.
 
 Every source page states counts, medians and dates, and every one of them was read
 from the source's own API rather than recalled. Those numbers go stale, and a stale
-number on a page about staying current is the worst kind. For the Krugman page the
-check is a script:
+number on a page about staying current is the worst kind. Two pages have a script
+that re-reads their sources:
 
 ```
 python3 tools/krugman-figures.py --as-of 2026-11-12
 ```
 
-It walks the Substack archive, re-fetches every feed the page lists — including the
-three it marks dead — queries the Stone Center, and prints each figure the page
-quotes. Reconcile by eye. Pass `--as-of` the cutoff in the page's footer, or the
-year-to-date numbers will not line up; `--cache FILE` saves the archive so repeated
-runs do not re-walk forty pages.
+```
+python3 tools/dan-moore-figures.py --as-of 2026-11-13
+```
 
-Stdlib only, no build step, and it writes nothing into `docs/`.
+The first walks the Substack archive, re-fetches every feed the page lists —
+including the three it marks dead — queries the Stone Center, and prints each
+figure the page quotes. `--cache FILE` saves the archive so repeated runs do not
+re-walk forty pages.
+
+The second walks all 23 pages of the FusionAuth author page, reads the company
+feed, and reconciles the two slug by slug — which is the check that matters there,
+because the page's advice turns on which posts a feed filter catches. It reproduces
+the era table from the feed's category tags and probes the Markdown mirror with
+both a real slug and a missing one. `--words` adds a fetch per post to re-measure
+the medians, `--links` checks that every post the page recommends still resolves,
+and `--cache FILE` saves the walk.
+
+Reconcile by eye, and pass `--as-of` the cutoff in the page's footer or the
+year-to-date numbers will not line up.
+
+Stdlib only, no build step, and neither writes anything into `docs/`.
+
+Both print a little more than the page states, on purpose. Where a figure needs a
+judgement — which short Krugman posts are day-off notices, which FusionAuth
+categories belong to which table row — the script lists the items instead of
+bucketing them, because a regex that confidently contradicts the page is worse
+than no check at all.
 
 The service worker deliberately does **not** precache `og/`, `sitemap.xml` or
 `robots.txt`: crawlers and link unfurlers read those, visitors never do, and
