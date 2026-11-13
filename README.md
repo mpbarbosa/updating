@@ -12,6 +12,7 @@ world, so that I can stay up to date.
 | Dan Moore | Worth following, with a filter. 159 posts on FusionAuth's blog since 2020, two thirds of it dev-rel work worth skipping — but since 2025 a fortnightly stream of long explainers on OAuth, identity standards and agent authorization. No per-author feed. | [index](docs/dan-moore.html) |
 | Andrej Karpathy | Deep, slow. 11 posts in 2025, 3 in 2026. Two live blogs with separate feeds. Excellent for understanding, poor for news. | [index](docs/karpathy.html) |
 | Bright Lights Film Journal | Worth following, by subject. A film journal from 1974, online since 1995, 2,928 articles deep and publishing an essay every three days — but zero reviews, festival reports or news in all of 2026. Feeds for every category and author, all working. 74 articles this year from 61 different writers, and the masthead's own critics have stopped filing. | [index](docs/brightlights.html) |
+| Paul Krugman | Worth following, on the right day. 793 posts in the 702 days since he left the New York Times for Substack: free political commentary on weekdays, and one paid 3,000-word economics essay every Sunday — 42 for 42 in 2026. The economics is the reason to read him and it is the half behind the paywall. One feed, twenty items, sixteen days of memory — and a free back door at the CUNY Stone Center, which reposts whole paid series and carries the lectures. | [index](docs/krugman.html) |
 
 ## Feeds worth subscribing to
 
@@ -27,6 +28,13 @@ world, so that I can stay up to date.
   (`/category/<slug>/feed/`), as does any author (`/author/<slug>/feed/`)
 - `https://brightlightsfilm.com/feed/` — the whole journal, ten items deep. Fine for a daily
   reader, lossy if you check in monthly; prefer a category feed
+- `https://api.substack.com/feed/podcast/277517.rss` — Krugman's podcast and video, and the
+  only deep feed on his site: 101 items back to January 2025
+- `https://paulkrugman.substack.com/feed` — all of Krugman's writing, twenty items. At 33 posts
+  a month that is about sixteen days, and there is no category or tag feed to narrow it with
+- `https://stonecenter.gc.cuny.edu/?s=krugman&feed=rss2` — not his site: the CUNY Stone Center,
+  where he is a senior scholar. Carries his lectures and reposts whole paid series free. A
+  WordPress keyword feed, ten items, about one a month
 
 ## Layout
 

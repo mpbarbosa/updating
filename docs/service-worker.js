@@ -23,7 +23,7 @@
  * the one with the version stamp on it.
  */
 
-const CACHE_VERSION = '2026-11-12a';
+const CACHE_VERSION = '2026-11-12b';
 const CACHE_NAME = `updating-${CACHE_VERSION}`;
 
 /** Every file the site is made of — small enough to take all of it offline. */
@@ -34,6 +34,7 @@ const PRECACHE = [
   './karpathy.html',
   './dan-moore.html',
   './brightlights.html',
+  './krugman.html',
   './offline.html',
   './home.css',
   './style.css',

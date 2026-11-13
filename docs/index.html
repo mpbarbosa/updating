@@ -32,7 +32,7 @@
     <div class="who-badge" aria-hidden="true">UP</div>
     <div class="greet">
       <h1 id="greeting">Updating</h1>
-      <p>Three sources assessed &middot; last revised 11 November 2026</p>
+      <p>Four sources assessed &middot; last revised 12 November 2026</p>
     </div>
     <div class="search" role="search">
       <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.25"/><path d="M12.5 12.5 17 17"/></svg>
@@ -46,83 +46,70 @@
   <main class="grid" id="grid">
 
     <!-- hero: newest thing across every source -->
-    <article class="tile hero" data-tags="bright lights film journal cool hand luke newest top story essay film criticism">
-      <a class="shot" href="https://brightlightsfilm.com/the-world-shakers-manifesto-cool-hand-luke/">
-        <span class="badge">Newest &middot; 10 Nov 2026</span>
-        <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Abstract illustration: a projector beam widening across a dark hall onto a lit frame, with film perforations along the edges.">
+    <article class="tile hero" data-tags="paul krugman substack economics climates of treason newest top story video maga politics">
+      <a class="shot" href="https://paulkrugman.substack.com/p/climates-of-treason">
+        <span class="badge">Newest &middot; 12 Nov 2026</span>
+        <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Abstract illustration: a volatile line chart over a dark grid, climbing and then breaking downward, with a lit panel carrying a play symbol at the right.">
           <defs>
-            <linearGradient id="hall" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#1b1208"/><stop offset="0.55" stop-color="#2a1a0d"/><stop offset="1" stop-color="#140f14"/>
+            <linearGradient id="deck" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#0a1a18"/><stop offset="0.6" stop-color="#0d2420"/><stop offset="1" stop-color="#0b1216"/>
             </linearGradient>
-            <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#ffd79a" stop-opacity="0.55"/><stop offset="1" stop-color="#ffd79a" stop-opacity="0.07"/>
+            <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#4e9b74" stop-opacity="0.45"/><stop offset="1" stop-color="#4e9b74" stop-opacity="0"/>
             </linearGradient>
-            <radialGradient id="lamp" cx="0.07" cy="0.5" r="0.3">
-              <stop offset="0" stop-color="#fff3d6" stop-opacity="0.9"/><stop offset="1" stop-color="#fff3d6" stop-opacity="0"/>
+            <radialGradient id="lift" cx="0.22" cy="0.15" r="0.55">
+              <stop offset="0" stop-color="#9fe3c0" stop-opacity="0.22"/><stop offset="1" stop-color="#9fe3c0" stop-opacity="0"/>
             </radialGradient>
           </defs>
-          <rect width="800" height="300" fill="url(#hall)"/>
-          <!-- the beam, widening left to right -->
-          <path d="M52 150 L800 24 L800 276 Z" fill="url(#beam)"/>
-          <path d="M52 150 L800 86 L800 214 Z" fill="#ffe7bd" fill-opacity="0.14"/>
-          <!-- dust in the light -->
-          <g fill="#ffe7bd" fill-opacity="0.5">
-            <circle cx="210" cy="138" r="1.6"/><circle cx="300" cy="170" r="1.2"/><circle cx="395" cy="120" r="1.8"/>
-            <circle cx="470" cy="186" r="1.3"/><circle cx="560" cy="108" r="1.5"/><circle cx="640" cy="198" r="1.2"/>
-            <circle cx="355" cy="205" r="1.1"/><circle cx="520" cy="142" r="1.4"/>
+          <rect width="800" height="300" fill="url(#deck)"/>
+          <!-- the grid -->
+          <g stroke="#9fe3c0" stroke-opacity="0.12" stroke-width="1">
+            <path d="M0 60h800M0 110h800M0 160h800M0 210h800M0 260h800"/>
+            <path d="M80 0v300M200 0v300M320 0v300M440 0v300M560 0v300"/>
           </g>
-          <!-- the lit screen at the far end: a projected scene, not a portrait -->
-          <rect x="586" y="88" width="190" height="124" rx="2" fill="#ffeecd" fill-opacity="0.92"/>
-          <clipPath id="scr"><rect x="586" y="88" width="190" height="124" rx="2"/></clipPath>
-          <g clip-path="url(#scr)" fill="#2a1a0d">
-            <circle cx="712" cy="126" r="16" fill-opacity="0.18"/>
-            <path d="M586 170h190v42H586z" fill-opacity="0.16"/>
-            <path d="M586 170c26-14 44 4 68-6s40-16 62-6 36 10 60 2v12H586z" fill-opacity="0.26"/>
-            <path d="M646 170v-20a7 7 0 0 1 14 0v20z" fill-opacity="0.55"/>
-            <circle cx="653" cy="142" r="6" fill-opacity="0.55"/>
-            <path d="M586 196h190v16H586z" fill-opacity="0.12"/>
+          <!-- the series: a long climb, then the break -->
+          <path d="M24 244 L96 226 L152 236 L214 198 L272 206 L330 168 L392 176 L450 128 L508 140 L556 96 L596 112 L634 70 L666 96 L700 164 L740 214 L776 236 L776 290 L24 290 Z" fill="url(#area)"/>
+          <path d="M24 244 L96 226 L152 236 L214 198 L272 206 L330 168 L392 176 L450 128 L508 140 L556 96 L596 112 L634 70 L666 96 L700 164 L740 214 L776 236"
+                fill="none" stroke="#86d6ac" stroke-opacity="0.95" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+          <g fill="#d6f4e4" fill-opacity="0.85">
+            <circle cx="634" cy="70" r="4.5"/><circle cx="776" cy="236" r="3.5"/>
           </g>
-          <rect x="586" y="88" width="190" height="124" rx="2" fill="none" stroke="#fff6e4" stroke-opacity="0.8" stroke-width="2"/>
-          <!-- projector head -->
-          <rect x="18" y="124" width="46" height="52" rx="6" fill="#0f0a06"/>
-          <rect x="18" y="124" width="46" height="52" rx="6" fill="none" stroke="#c9a46a" stroke-opacity="0.6" stroke-width="1.4"/>
-          <circle cx="30" cy="112" r="14" fill="none" stroke="#c9a46a" stroke-opacity="0.55" stroke-width="2.4"/>
-          <circle cx="60" cy="108" r="10" fill="none" stroke="#c9a46a" stroke-opacity="0.4" stroke-width="2"/>
-          <rect width="800" height="300" fill="url(#lamp)"/>
-          <!-- film perforations top and bottom -->
-          <g fill="#ffe7bd" fill-opacity="0.2">
-            <rect x="0" y="6" width="800" height="1" />
-            <rect x="0" y="293" width="800" height="1" />
+          <!-- a bar series underneath, quieter -->
+          <g fill="#4e9b74" fill-opacity="0.3">
+            <rect x="40" y="266" width="14" height="24"/><rect x="76" y="258" width="14" height="32"/><rect x="112" y="270" width="14" height="20"/>
+            <rect x="148" y="252" width="14" height="38"/><rect x="184" y="262" width="14" height="28"/><rect x="220" y="246" width="14" height="44"/>
+            <rect x="256" y="258" width="14" height="32"/><rect x="292" y="240" width="14" height="50"/><rect x="328" y="256" width="14" height="34"/>
           </g>
-          <g fill="#ffe7bd" fill-opacity="0.26">
-            <rect x="24" y="12" width="16" height="10" rx="2"/><rect x="84" y="12" width="16" height="10" rx="2"/><rect x="144" y="12" width="16" height="10" rx="2"/>
-            <rect x="204" y="12" width="16" height="10" rx="2"/><rect x="264" y="12" width="16" height="10" rx="2"/><rect x="324" y="12" width="16" height="10" rx="2"/>
-            <rect x="384" y="12" width="16" height="10" rx="2"/><rect x="444" y="12" width="16" height="10" rx="2"/><rect x="504" y="12" width="16" height="10" rx="2"/>
-            <rect x="564" y="12" width="16" height="10" rx="2"/><rect x="624" y="12" width="16" height="10" rx="2"/><rect x="684" y="12" width="16" height="10" rx="2"/><rect x="744" y="12" width="16" height="10" rx="2"/>
-            <rect x="24" y="278" width="16" height="10" rx="2"/><rect x="84" y="278" width="16" height="10" rx="2"/><rect x="144" y="278" width="16" height="10" rx="2"/>
-            <rect x="204" y="278" width="16" height="10" rx="2"/><rect x="264" y="278" width="16" height="10" rx="2"/><rect x="324" y="278" width="16" height="10" rx="2"/>
-            <rect x="384" y="278" width="16" height="10" rx="2"/><rect x="444" y="278" width="16" height="10" rx="2"/><rect x="504" y="278" width="16" height="10" rx="2"/>
-            <rect x="564" y="278" width="16" height="10" rx="2"/><rect x="624" y="278" width="16" height="10" rx="2"/><rect x="684" y="278" width="16" height="10" rx="2"/><rect x="744" y="278" width="16" height="10" rx="2"/>
+          <!-- the lit panel: this item is a video -->
+          <rect x="606" y="186" width="166" height="92" rx="3" fill="#07100e" fill-opacity="0.72" stroke="#9fe3c0" stroke-opacity="0.45" stroke-width="2"/>
+          <path d="M672 212 L706 232 L672 252 Z" fill="#d6f4e4" fill-opacity="0.9"/>
+          <g fill="#9fe3c0" fill-opacity="0.35">
+            <rect x="622" y="264" width="134" height="2" rx="1"/><rect x="622" y="264" width="46" height="2" rx="1" fill-opacity="0.9"/>
           </g>
+          <rect width="800" height="300" fill="url(#lift)"/>
         </svg>
       </a>
       <div class="lede">
-        <p class="byline"><span class="src-dot bl" aria-hidden="true"></span><strong>Bright Lights Film Journal</strong><span class="dot" aria-hidden="true"></span><span>brightlightsfilm.com</span><span class="dot" aria-hidden="true"></span><span>essay</span></p>
-        <h2><a href="https://brightlightsfilm.com/the-world-shakers-manifesto-cool-hand-luke/">The World-Shaker's Manifesto: <em>Cool Hand Luke</em></a></h2>
-        <p>Ifeoluwa Togun on a hero who will not explain himself: world-shakers cannot say why they keep going in the face of retribution, and the film's power is that it never makes Luke try. A 3,500-word essay on a 1967 film &mdash; which is exactly what this source is for.</p>
-        <p class="byline"><a href="brightlights.html">Full source index &rarr;</a></p>
+        <p class="byline"><span class="src-dot pk" aria-hidden="true"></span><strong>Paul Krugman</strong><span class="dot" aria-hidden="true"></span><span>paulkrugman.substack.com</span><span class="dot" aria-hidden="true"></span><span>video &middot; 6 min</span></p>
+        <h2><a href="https://paulkrugman.substack.com/p/climates-of-treason">Climates of Treason</a></h2>
+        <p>Six minutes on his case that MAGA is making the country weaker rather than stronger, with the transcript in the post. The newest item on the board, and it will almost always be his: he has published on 313 of this year's 316 days.</p>
+        <p class="byline"><a href="krugman.html">Full source index &rarr;</a></p>
       </div>
     </article>
 
-    <!-- latest across both sources -->
-    <article class="tile tall" data-tags="latest posts feed recent dan moore karpathy bright lights oauth mcp token agents film essays">
+    <!-- latest across every source -->
+    <article class="tile tall" data-tags="latest posts feed recent dan moore karpathy bright lights krugman economics oauth mcp token agents film essays">
       <div class="t-head">
         <span class="ico" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5h12M4 10h12M4 14.5h8"/></svg></span>
-        <h2>Latest across all three</h2>
-        <span class="cnt">12 posts</span>
+        <h2>Latest across all four</h2>
+        <span class="cnt">17 posts</span>
       </div>
       <div class="scroller">
         <ul class="feedlist">
+          <li><a href="https://paulkrugman.substack.com/p/climates-of-treason"><span class="ttl">Climates of Treason</span><span class="sub"><i class="src-dot pk"></i>Krugman &middot; 12 Nov 2026</span></a></li>
+          <li><a href="https://paulkrugman.substack.com/p/the-cyberpunking-of-america"><span class="ttl">The Cyberpunking of America</span><span class="sub"><i class="src-dot pk"></i>Krugman &middot; 10 Nov 2026</span></a></li>
+          <li><a href="https://paulkrugman.substack.com/p/the-texas-miracle"><span class="ttl">The Texas Miracle</span><span class="sub"><i class="src-dot pk"></i>Krugman &middot; 9 Nov 2026</span></a></li>
+          <li><a href="https://paulkrugman.substack.com/p/after-the-bubble-bursts"><span class="ttl">After the Bubble Bursts</span><span class="sub"><i class="src-dot pk"></i>Krugman &middot; 8 Nov 2026 <span class="flag">paid</span></span></a></li>
           <li><a href="https://brightlightsfilm.com/the-world-shakers-manifesto-cool-hand-luke/"><span class="ttl">The World-Shaker's Manifesto: Cool Hand Luke</span><span class="sub"><i class="src-dot bl"></i>Bright Lights &middot; 10 Nov 2026</span></a></li>
           <li><a href="https://brightlightsfilm.com/he-did-it-his-way-alex-cox-on-dead-souls/"><span class="ttl">He Did It His Way: Alex Cox on Dead Souls</span><span class="sub"><i class="src-dot bl"></i>Bright Lights &middot; 7 Nov 2026</span></a></li>
           <li><a href="https://brightlightsfilm.com/the-men-we-admire-hud-1963-on-criterion/"><span class="ttl">The Men We Admire: Hud (1963) on Criterion</span><span class="sub"><i class="src-dot bl"></i>Bright Lights &middot; 4 Nov 2026</span></a></li>
@@ -142,14 +129,14 @@
 
     <!-- two small stats -->
     <article class="tile s" data-tags="stats sources assessed count">
-      <div class="num">3</div>
+      <div class="num">4</div>
       <p class="cap">sources assessed</p>
       <p class="foot"><a href="sources.html">See all &rarr;</a></p>
     </article>
     <article class="tile s" data-tags="stats posts indexed count">
-      <div class="num">3,101</div>
+      <div class="num">3,900</div>
       <p class="cap">posts counted across them</p>
-      <p class="foot">2,928 + 159 + 14</p>
+      <p class="foot">2,928 + 799 + 159 + 14</p>
     </article>
 
     <!-- Dan Moore -->
@@ -191,12 +178,25 @@
       <p class="go"><a href="brightlights.html">Read the index &rarr;</a></p>
     </article>
 
+    <!-- Paul Krugman -->
+    <article class="tile" data-tags="paul krugman substack economics tariffs trade oligarchy federal reserve ai bubble nobel new york times paywall sunday">
+      <div class="t-head">
+        <span class="ico" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 15.5 7.5 9l3.5 3L17 4.5"/><path d="M3 17.5h14"/></svg></span>
+        <h2>Paul Krugman</h2>
+        <span class="cnt">1.17 / day</span>
+      </div>
+      <p class="verdict-pill caution">Follow, mind the day</p>
+      <p class="src-say">793 posts in 702 days since he left the Times &mdash; free political commentary on weekdays, and one paid 3,000-word economics essay every Sunday, 42 for 42 this year. The economics is the reason to read him and it is the half you pay for. One feed, twenty items, sixteen days.</p>
+      <div class="chips"><span>tariffs &amp; trade</span><span>the AI bubble</span><span>oligarchy</span><span>$7 a month</span><span>free at CUNY</span></div>
+      <p class="go"><a href="krugman.html">Read the index &rarr;</a></p>
+    </article>
+
     <!-- feeds -->
     <article class="tile tall" data-tags="feeds rss atom subscribe urls reader">
       <div class="t-head">
         <span class="ico" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="5" cy="15" r="1.6" fill="currentColor" stroke="none"/><path d="M4 10a6 6 0 0 1 6 6M4 5.5a10.5 10.5 0 0 1 10.5 10.5"/></svg></span>
         <h2>Feeds worth subscribing to</h2>
-        <span class="cnt">7</span>
+        <span class="cnt">10</span>
       </div>
       <div class="scroller">
         <ul class="feeds">
@@ -207,8 +207,11 @@
           <li><span class="url">https://www.mooreds.com/wordpress/feed</span><span class="owner">Dan Moore</span><button class="copy" type="button" aria-label="Copy feed URL"></button></li>
           <li><span class="url">https://brightlightsfilm.com/category/essays/feed/</span><span class="owner">Bright Lights</span><button class="copy" type="button" aria-label="Copy feed URL"></button></li>
           <li><span class="url">https://brightlightsfilm.com/feed/</span><span class="owner">Bright Lights</span><button class="copy" type="button" aria-label="Copy feed URL"></button></li>
+          <li><span class="url">https://paulkrugman.substack.com/feed</span><span class="owner">Krugman</span><button class="copy" type="button" aria-label="Copy feed URL"></button></li>
+          <li><span class="url">https://api.substack.com/feed/podcast/277517.rss</span><span class="owner">Krugman</span><button class="copy" type="button" aria-label="Copy feed URL"></button></li>
+          <li><span class="url">https://stonecenter.gc.cuny.edu/?s=krugman&amp;feed=rss2</span><span class="owner">Krugman</span><button class="copy" type="button" aria-label="Copy feed URL"></button></li>
         </ul>
-        <p class="hint">The FusionAuth feed is the whole company blog: filter on <code>&lt;author&gt;Dan Moore&lt;/author&gt;</code>. The mooreds.com one is monthly and a different subject entirely &mdash; engineering management, no identity. Bright Lights has a feed for every category and every author &mdash; <code>/category/&lt;slug&gt;/feed/</code> &mdash; and a category feed is the better subscription.</p>
+        <p class="hint">The FusionAuth feed is the whole company blog: filter on <code>&lt;author&gt;Dan Moore&lt;/author&gt;</code>. The mooreds.com one is monthly and a different subject entirely &mdash; engineering management, no identity. Bright Lights has a feed for every category and every author &mdash; <code>/category/&lt;slug&gt;/feed/</code> &mdash; and a category feed is the better subscription. Krugman is the other extreme: one feed for all the writing, twenty items, no category or tag feeds at all &mdash; his podcast feed is the only one on that site that reaches back a year. The Stone Center one is not his site at all: it is a WordPress keyword search at the CUNY centre where he is a senior scholar, and it carries his lectures and whole paid series reposted free.</p>
       </div>
     </article>
 
@@ -223,7 +226,7 @@
         <i style="height:67%"></i><i style="height:100%"></i><i style="height:76%"></i><i style="height:45%"></i><i style="height:21%"></i><i style="height:38%"></i><i class="now" style="height:31%"></i>
       </div>
       <div class="xax"><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span></div>
-      <p class="cap">Fewer posts, longer ones. Karpathy runs the other way entirely: 11 posts in 2025, 3 in 2026, and a six-month silence in the middle of this year. Bright Lights makes both look dormant &mdash; 74 articles this year, ten in October alone, and accelerating.</p>
+      <p class="cap">Fewer posts, longer ones. Karpathy runs the other way entirely: 11 posts in 2025, 3 in 2026, and a six-month silence in the middle of this year. Bright Lights makes both look dormant &mdash; 74 articles this year, ten in October alone, and accelerating. Krugman makes Bright Lights look dormant: 370 posts in 2026, which is more in a single month than the journal manages in five.</p>
     </article>
 
     <!-- caveat -->
@@ -235,7 +238,8 @@
       <p>Dan Moore's author page lists 159 posts; the blog feed carries 156. All three it drops are from 2026, and one of them &mdash; <em>Your Token Proves Who You Are, Not What You Own</em> &mdash; is among his best.</p>
       <p>A reader alone will not see them. Give the author page a look once a month.</p>
       <p>Bright Lights has the opposite problem: its feeds work everywhere but hold only ten items each, which at ten articles a month is three weeks of cover. And the &ldquo;RSS&rdquo; button in its own header points at a FeedBurner service Google retired in 2021 &mdash; take <code>/feed/</code> or a category feed instead.</p>
-      <p class="go"><a href="dan-moore.html">Where the hole is &rarr;</a> &middot; <a href="brightlights.html">the ten-item window &rarr;</a></p>
+      <p>Krugman's feed is the worst fit of the four: twenty items against 33 posts a month, no category or tag feeds to narrow it, and the Sunday essay &mdash; the only part worth paying for &mdash; arrives as a truncated preview.</p>
+      <p class="go"><a href="dan-moore.html">Where the hole is &rarr;</a> &middot; <a href="brightlights.html">the ten-item window &rarr;</a> &middot; <a href="krugman.html">sixteen days of memory &rarr;</a></p>
     </article>
 
     <!-- method -->
@@ -282,9 +286,9 @@
         <span class="cnt">worth knowing before you read anyone else</span>
       </div>
       <div class="chips" style="margin-top:0">
-        <span>Software 1.0 / 2.0 / 3.0</span><span>verifiability</span><span>jagged intelligence</span><span>ghosts, not animals</span><span>RLVR</span><span>vibe coding</span><span>agentic engineering</span><span>autonomy slider</span><span>benchmaxxing</span><span>LLM OS</span><span>delegation vs impersonation</span><span>CIMD</span><span>the authorization gap</span><span>fine-grained authz</span>
+        <span>Software 1.0 / 2.0 / 3.0</span><span>verifiability</span><span>jagged intelligence</span><span>ghosts, not animals</span><span>RLVR</span><span>vibe coding</span><span>agentic engineering</span><span>autonomy slider</span><span>benchmaxxing</span><span>LLM OS</span><span>delegation vs impersonation</span><span>CIMD</span><span>the authorization gap</span><span>fine-grained authz</span><span>oligarchy</span><span>broligarchs</span><span>Trumponomics</span><span>geoeconomics</span><span>weaponized interdependence</span><span>kakistocracy</span>
       </div>
-      <p class="cap">Karpathy's terms are on <a href="karpathy.html">his index</a>; the identity half is defined as it comes up on <a href="dan-moore.html">Dan Moore's</a>.</p>
+      <p class="cap">Karpathy's terms are on <a href="karpathy.html">his index</a>; the identity half is defined as it comes up on <a href="dan-moore.html">Dan Moore's</a>; the last six are Krugman's, and all six come straight off his own headlines &mdash; <a href="krugman.html">his index</a> says which of them get a Sunday essay behind them.</p>
     </article>
 
   </main>
