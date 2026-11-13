@@ -8,7 +8,7 @@
 <title>Dan Moore source index · Updating</title>
 <meta name="description" content="An independent reading index of Dan Moore on identity and OAuth: what changed in 2025, which of his 159 FusionAuth posts repay reading, and which feed to take.">
 <meta name="author" content="Marcelo Pereira Barbosa">
-<meta property="article:modified_time" content="2026-11-11">
+<meta property="article:modified_time" content="2026-11-13">
 <meta property="article:author" content="Marcelo Pereira Barbosa">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://mpbarbosa.github.io/updating/dan-moore.html">
@@ -87,7 +87,7 @@
       "inLanguage": "en",
       "genre": "Media criticism",
       "datePublished": "2026-11-11",
-      "dateModified": "2026-11-11",
+      "dateModified": "2026-11-13",
       "keywords": "Dan Moore, OAuth, identity, FusionAuth, agent authorization, RSS feed",
       "about": {
         "@type": "Person",
@@ -116,7 +116,7 @@
         "@id": "https://mpbarbosa.github.io/updating/#website"
       },
       "inLanguage": "en",
-      "dateModified": "2026-11-11",
+      "dateModified": "2026-11-13",
       "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": "https://mpbarbosa.github.io/updating/og/dan-moore.png"
@@ -159,7 +159,7 @@
     </ol>
   </nav>
   <header class="masthead">
-    <p class="eyebrow">Unofficial source index &middot; compiled 11 Nov 2026</p>
+    <p class="eyebrow">Unofficial source index &middot; compiled 11 Nov, rechecked 13 Nov 2026</p>
     <h1>Dan Moore</h1>
     <p class="lede">The most prolific writer on an identity vendor's blog &mdash; and, since 2025, one of the clearest explainers of where OAuth meets AI agents.</p>
     <p class="tagline">Sr. Director, CIAM Strategy &amp; Identity Standards at <a href="https://fusionauth.io/">FusionAuth</a> &middot; <a href="https://bsky.app/profile/mooreds.com">@mooreds</a></p>
@@ -169,9 +169,9 @@
     <div class="sec-head"><h2>The verdict</h2></div>
     <div class="verdict">
       <p class="k">Worth following, with a filter</p>
-      <p>He has written 159 posts on the FusionAuth blog since March 2020 &mdash; 156 of the 417 items in the blog's feed, more than four times the next most prolific author. For most of that run he was the dev-rel voice of the company: release announcements, customer case studies, conference trailers.</p>
-      <p>That stopped. He has not written a release announcement since April 2024 or a conference trailer since October 2023, and the explanatory &ldquo;Education&rdquo; pieces went from 11% of his output in 2020&ndash;22 to 69% in 2025&ndash;26. What is left is a roughly fortnightly stream of 1,500&ndash;5,000-word explainers on identity standards, now aimed squarely at the unsolved problem of authorizing AI agents.</p>
-      <p>The catch is mechanical: there is no per-author feed, and the one feed that carries him is the whole company blog. Following him takes a filter, and the filter has a hole in it.</p>
+      <p>He has written 159 posts on the FusionAuth blog since March 2020 &mdash; every one of them carried in the blog's 418-item feed, and more than four times as many as the next most prolific author. For most of that run he was the dev-rel voice of the company: release announcements, customer case studies, conference trailers.</p>
+      <p>That stopped. He has not written a release announcement since April 2024 or a conference trailer since October 2023, and the explanatory &ldquo;Education&rdquo; pieces went from 11% of his output in 2020&ndash;22 to 69% in 2025&ndash;26. What is left is a roughly fortnightly stream of explainers on identity standards &mdash; a median of 1,700 words, stretching to 5,900 when a subject earns it &mdash; now aimed squarely at the unsolved problem of authorizing AI agents.</p>
+      <p>The catch is mechanical: there is no per-author feed, and the one feed that carries him is the whole company blog. Following him takes a filter, and the filter has to be the right shape.</p>
     </div>
   </section>
 
@@ -194,7 +194,7 @@
           <tr>
             <td class="ch"><a href="https://fusionauth.io/blog/feed.xml">FusionAuth blog feed</a></td>
             <td><span class="pill live">the only feed</span></td>
-            <td class="feed">fusionauth.io/blog/feed.xml &mdash; 417 items back to 2018, each with an <code>&lt;author&gt;</code> tag; filter on <code>Dan Moore</code></td>
+            <td class="feed">fusionauth.io/blog/feed.xml &mdash; 418 items back to 2018, each with an <code>&lt;author&gt;</code> tag; match on <em>contains</em> <code>Dan Moore</code>, not equals</td>
           </tr>
           <tr>
             <td class="ch"><a href="https://www.mooreds.com/wordpress/">mooreds.com</a></td>
@@ -225,9 +225,9 @@
       </table>
     </div>
     <div class="caveat" style="margin-top:1.75rem">
-      <p class="k">The filter has a hole</p>
-      <p>The author page lists 159 posts; the blog feed carries 156 of them. The three it drops are all from 2026 &mdash; <em>Your Token Proves Who You Are, Not What You Own</em>, <em>Amazon Cognito and FusionAuth Comparison</em> and <em>How to Perform a Bulk Permissions Check in FusionAuth FGA By Permify</em> &mdash; and the first of those is one of his better pieces. A feed reader alone will miss them, so the author page is still worth a monthly look.</p>
-      <p>The page also advertises a Markdown version of itself at <code>/blog/author/dan-moore.md</code>. It returns 404 behind a 200-shaped HTML page. Ignore it.</p>
+      <p class="k">The feed carries all of him; your filter may not</p>
+      <p>All 159 posts on the author page are in the blog feed. Nothing is dropped &mdash; but three of them are co-authored, and the feed writes the whole byline into one <code>&lt;author&gt;</code> tag: <code>Brad McCarty, Dan Moore</code>, <code>Bryan Giese, Brad McCarty, Dan Moore</code>, <code>&#214;mer Topal, Dan Moore</code>. A rule that tests the author <em>equals</em> &ldquo;Dan Moore&rdquo; silently loses all three &mdash; <em>Your Token Proves Who You Are, Not What You Own</em>, <em>Amazon Cognito and FusionAuth Comparison</em> and <em>How to Perform a Bulk Permissions Check in FusionAuth FGA By Permify</em> &mdash; and the first is one of his better pieces. Test for <em>contains</em> instead and you get all 159, plus a fourth co-authored post from December 2020 that the author page itself leaves out.</p>
+      <p>The page also advertises a Markdown version of itself at <code>/blog/author/dan-moore.md</code>. It answers with a plain HTTP 404 and an HTML error page titled &ldquo;404 Not Found&rdquo;, not Markdown. Ignore it.</p>
     </div>
   </section>
 
@@ -239,8 +239,8 @@
     <div class="stats">
       <div class="stat"><div class="n">159</div><div class="k">posts since 2020</div></div>
       <div class="stat"><div class="n">13</div><div class="k">posts in 2026 so far</div></div>
-      <div class="stat"><div class="n">~2,200</div><div class="k">median words</div></div>
-      <div class="stat"><div class="n">20 d</div><div class="k">since last post</div></div>
+      <div class="stat"><div class="n">1,800</div><div class="k">median words, 2025&ndash;26</div></div>
+      <div class="stat"><div class="n">22 d</div><div class="k">since last post</div></div>
     </div>
     <div class="chart" role="img" aria-label="Posts per year: 28 in 2020, 42 in 2021, 32 in 2022, 19 in 2023, 9 in 2024, 16 in 2025, and 13 so far in 2026.">
       <div class="bars free" style="--cols:7">
@@ -248,7 +248,7 @@
       </div>
     </div>
     <div class="xaxis free" style="--cols:7"><span>2020</span><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
-    <p class="chart-cap">Volume peaked at 42 posts in 2021 and bottomed out at nine in 2024. The 2026 bar covers ten months. In 2026 the median gap between posts has been about a fortnight, with one three-month silence from mid-June to early September &mdash; so he is a steady source, not a fast one.</p>
+    <p class="chart-cap">Volume peaked at 42 posts in 2021 and bottomed out at nine in 2024. The 2026 bar covers ten and a half months. In 2026 the median gap between posts has been about a fortnight, with one three-month silence from mid-June to early September &mdash; so he is a steady source, not a fast one.</p>
   </section>
 
   <section>
@@ -465,7 +465,7 @@
 
   <footer>
     <p>An independent reading index, not affiliated with or endorsed by Dan Moore or FusionAuth. All links point to their pages; nothing here is his writing. Summaries are paraphrases, and the characterisations are this index's opinion, not his.</p>
-    <p>Compiled 11 November 2026 from <a href="https://fusionauth.io/blog/author/dan-moore/">his FusionAuth author page</a> (all 23 pages enumerated), <a href="https://fusionauth.io/blog/feed.xml">the blog's RSS feed</a>, <a href="https://www.mooreds.com/wordpress/">mooreds.com</a>, <a href="https://letterstoanewdeveloper.com/">letterstoanewdeveloper.com</a>, <a href="https://github.com/mooreds">GitHub</a> and <a href="https://bsky.app/profile/mooreds.com">Bluesky</a>. Post counts and category tallies are from the author page; word counts were measured on a sample of twenty posts.</p>
+    <p>Compiled 11 November 2026 from <a href="https://fusionauth.io/blog/author/dan-moore/">his FusionAuth author page</a> (all 23 pages enumerated), <a href="https://fusionauth.io/blog/feed.xml">the blog's RSS feed</a>, <a href="https://www.mooreds.com/wordpress/">mooreds.com</a>, <a href="https://letterstoanewdeveloper.com/">letterstoanewdeveloper.com</a>, <a href="https://github.com/mooreds">GitHub</a> and <a href="https://bsky.app/profile/mooreds.com">Bluesky</a>. Post counts and category tallies are from the author page, whose 159 entries were matched one by one against the feed; word counts were measured on all 159 posts, not sampled. Rechecked against the same sources on 13 November 2026.</p>
     <p class="me">Kept by Marcelo Pereira Barbosa &mdash;
       <a href="https://www.mpbarbosa.com" rel="me">home page</a> &middot;
       <a href="https://github.com/mpbarbosa" rel="me">portfolio</a> &middot;

@@ -20,7 +20,8 @@ world, so that I can stay up to date.
 - `https://karpathy.github.io/feed.xml` — his older blog, active again as of Feb 2026
 - `https://github.com/karpathy.atom` — repository activity
 - `https://fusionauth.io/blog/feed.xml` — carries Dan Moore, but it is the whole company
-  blog: filter on `<author>Dan Moore</author>`, and note it is missing three of his 2026 posts
+  blog, and it carries every one of his posts. Match on *contains* `Dan Moore`, not equals:
+  three posts are co-authored and the feed writes the whole byline into one `<author>` tag
 - `https://www.mooreds.com/wordpress/feed` — his personal blog; monthly, and a different
   subject entirely (engineering management and careers, no identity)
 - `https://brightlightsfilm.com/category/essays/feed/` — the Bright Lights label that tracks
