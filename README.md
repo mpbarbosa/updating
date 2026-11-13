@@ -52,6 +52,8 @@ world, so that I can stay up to date.
   sitemap in step with the "compiled" date on each page
 - `docs/og/*.png` — 1200×630 link-preview cards, one per page
 - `tools/make-og-cards.py` — regenerates those cards (see *Search and sharing*)
+- `tools/krugman-figures.py` — re-measures every number on the Krugman page
+  against its sources (see *Checking the figures*)
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
@@ -87,9 +89,28 @@ pip install Pillow
 python3 tools/make-og-cards.py
 ```
 
-That is the one script in the repo and it is *not* a build step — the cards are
-committed, and it only needs running when a page is added, renamed or re-pitched.
-Edit the `CARDS` table at the top of the script to change what a card says.
+It is *not* a build step — the cards are committed, and it only needs running when
+a page is added, renamed or re-pitched. Edit the `CARDS` table at the top of the
+script to change what a card says.
+
+## Checking the figures
+
+Every source page states counts, medians and dates, and every one of them was read
+from the source's own API rather than recalled. Those numbers go stale, and a stale
+number on a page about staying current is the worst kind. For the Krugman page the
+check is a script:
+
+```
+python3 tools/krugman-figures.py --as-of 2026-11-12
+```
+
+It walks the Substack archive, re-fetches every feed the page lists — including the
+three it marks dead — queries the Stone Center, and prints each figure the page
+quotes. Reconcile by eye. Pass `--as-of` the cutoff in the page's footer, or the
+year-to-date numbers will not line up; `--cache FILE` saves the archive so repeated
+runs do not re-walk forty pages.
+
+Stdlib only, no build step, and it writes nothing into `docs/`.
 
 The service worker deliberately does **not** precache `og/`, `sitemap.xml` or
 `robots.txt`: crawlers and link unfurlers read those, visitors never do, and
