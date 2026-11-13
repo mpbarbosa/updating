@@ -1,0 +1,20 @@
+# Updating — https://mpbarbosa.github.io/updating/
+#
+# Note: robots.txt is only honoured at the origin ROOT. This site is a GitHub
+# Pages *project* page, so this file is served at /updating/robots.txt and
+# crawlers ignore it. It is kept here so it is already correct if the site ever
+# moves to a domain of its own, and as a statement of intent either way.
+#
+# Until then, the sitemap is discovered by submitting it directly:
+#   Google Search Console  → Sitemaps → sitemap.xml
+#   Bing Webmaster Tools   → Sitemaps → Submit sitemap
+# Both accept the full URL below.
+
+User-agent: *
+Allow: /
+
+# The offline fallback is a service-worker artefact, not a destination.
+# It also carries its own <meta name="robots" content="noindex">.
+Disallow: /offline.html
+
+Sitemap: https://mpbarbosa.github.io/updating/sitemap.xml

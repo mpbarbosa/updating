@@ -23,10 +23,16 @@
  * the one with the version stamp on it.
  */
 
-const CACHE_VERSION = '2026-11-12b';
+const CACHE_VERSION = '2026-11-12c';
 const CACHE_NAME = `updating-${CACHE_VERSION}`;
 
-/** Every file the site is made of — small enough to take all of it offline. */
+/**
+ * Every file the site is made of — small enough to take all of it offline.
+ *
+ * Deliberately absent: og/*.png, sitemap.xml and robots.txt. Those are read by
+ * crawlers and link unfurlers, never by a visitor, so precaching them would add
+ * ~95 KB to every install and serve nobody offline.
+ */
 const PRECACHE = [
   './',
   './index.html',

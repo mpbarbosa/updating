@@ -48,10 +48,52 @@ world, so that I can stay up to date.
 - `docs/style.css` — shared styles for the hub and the source pages
 - `docs/manifest.webmanifest`, `docs/service-worker.js`, `docs/offline.html`,
   `docs/icon-*.png`, `docs/favicon.svg` — the installable/offline layer
+- `docs/sitemap.xml`, `docs/robots.txt` — the crawl layer. Keep `lastmod` in the
+  sitemap in step with the "compiled" date on each page
+- `docs/og/*.png` — 1200×630 link-preview cards, one per page
+- `tools/make-og-cards.py` — regenerates those cards (see *Search and sharing*)
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
 first, and what to discount.
+
+## Search and sharing
+
+Every indexable page carries a unique `<title>` and meta description, a
+canonical URL, Open Graph and Twitter card tags with a 1200×630 image, and a
+JSON-LD `@graph`. The source pages describe themselves as `Article` with an
+`about` entity for the person or publication being indexed, plus a
+`BreadcrumbList`; the hub pages use `WebSite`/`CollectionPage` and an `ItemList`
+of the four indexes. `docs/sitemap.xml` lists the six indexable pages;
+`offline.html` is `noindex` and deliberately absent from it.
+
+Two things are worth knowing:
+
+- **The homepage `<h1>` is not the greeting.** The board rewrites a `<p>` with
+  "Good morning / afternoon / evening"; the `<h1>` underneath it is fixed text.
+  Search engines render JavaScript, so putting the greeting in the `<h1>` made
+  the page's main heading read "Good evening" to a crawler. If you restyle the
+  header, keep those two elements distinct.
+- **`robots.txt` is inert here.** It is only honoured at the origin root, and
+  this is a GitHub Pages *project* page, so `/updating/robots.txt` is ignored.
+  The file is kept because it becomes correct the moment the site gets a domain
+  of its own. Until then the sitemap is discovered by submitting it in Google
+  Search Console and Bing Webmaster Tools.
+
+The link-preview cards are generated, not hand-drawn:
+
+```
+pip install Pillow
+python3 tools/make-og-cards.py
+```
+
+That is the one script in the repo and it is *not* a build step — the cards are
+committed, and it only needs running when a page is added, renamed or re-pitched.
+Edit the `CARDS` table at the top of the script to change what a card says.
+
+The service worker deliberately does **not** precache `og/`, `sitemap.xml` or
+`robots.txt`: crawlers and link unfurlers read those, visitors never do, and
+precaching them would put ~95 KB of dead weight into every install.
 
 ## Installable and offline
 
