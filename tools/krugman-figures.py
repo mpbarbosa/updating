@@ -8,6 +8,8 @@ then reconcile the report against the page by eye.
     python3 tools/krugman-figures.py                 # as of today
     python3 tools/krugman-figures.py --as-of 2026-11-12
     python3 tools/krugman-figures.py --cache /tmp/archive.json
+    python3 tools/krugman-figures.py --channels      # every channel in the table
+    python3 tools/krugman-figures.py --links         # every outbound link on the page
 
 Stdlib only. The archive walk is ~40 cursor-paginated requests and the
 publication rate-limits after roughly sixty, so --cache is worth using while
@@ -17,10 +19,26 @@ Every figure the page states should appear below it. Where the page and this
 script disagree, this script is the one that just asked the source -- but
 check the window first: the page fixes its 2026 statistics to a stated cutoff
 so they stay reproducible, and --as-of must match that cutoff to compare.
+
+Two things --channels prints that a status code alone would hide:
+
+  * the CONTENT TYPE. karpathy.ai/feed.xml and x.com/karpathy/rss both answer
+    200 with text/html; they are web pages wearing a feed's URL. A checker
+    reading the status alone prints a dead channel as live.
+
+  * a SECOND attempt at anything that failed. YouTube's feed endpoint answers
+    a rate-limited request with 404, not 429 -- so a single 404 from it says
+    nothing about whether the feed exists. That is not a hypothetical: this
+    page recorded his 547-video channel as having no uploads and no feed for
+    a day on the strength of one such 404, while YouTube's own channel
+    metadata was advertising the feed URL the whole time. Two attempts a
+    minute apart will usually separate "throttled" from "gone"; neither will
+    if you only ever ask once.
 """
 import argparse
 import json
 import os
+import pathlib
 import re
 import statistics as st
 import sys
@@ -50,12 +68,159 @@ FEEDS = [
     ("korean mirror",     "https://pk2kr.substack.com/feed"),
 ]
 
+# His YouTube channel id, as the channel's own metadata reports it (the
+# channelMetadataRenderer on /@PKrugman gives both the id and this exact
+# feed URL). The ?user=PKrugman form 404s even when the channel_id form
+# works -- both were measured in the same minute, before any throttling --
+# so use channel_id, and read the --channels note above about its 404s.
+YT_CHANNEL = "UCjY8KAGllKyZZd2FYF1vbPw"
+
+# Every row of the page's channel table, live and dead, in its order. The
+# dead ones are the point: "dead" is a claim with a shelf life, and it had
+# expired on more than one page in this repository before anyone re-asked.
+CHANNELS = [
+    ("substack, main feed", "https://paulkrugman.substack.com/feed"),
+    ("substack, about",     "https://paulkrugman.substack.com/about"),
+    ("substack, archive",   "https://paulkrugman.substack.com/archive"),
+    ("substack, podcast",   "https://paulkrugman.substack.com/podcast"),
+    ("podcast feed",        "https://api.substack.com/feed/podcast/277517.rss"),
+    ("podcast shortcut",    "https://paulkrugman.substack.com/feed/podcast"),
+    ("archive API",         ARCHIVE + "?sort=new&limit=1"),
+    ("stone center feed",   "https://stonecenter.gc.cuny.edu/?s=krugman&feed=rss2"),
+    ("apple podcasts",      "https://podcasts.apple.com/us/podcast/"
+                            "paul-krugman-podcast/id1877144831"),
+    ("apple, episode count", "https://itunes.apple.com/lookup?id=1877144831"
+                             "&entity=podcastEpisode&limit=200"),
+    ("notes, his nav link", "https://paulkrugman.substack.com/notes"),
+    ("notes, where it lives", "https://substack.com/@paulkrugman/notes"),
+    ("bluesky feed",        "https://bsky.app/profile/pkrugman.bsky.social/rss"),
+    ("bluesky profile API", "https://public.api.bsky.app/xrpc/"
+                            "app.bsky.actor.getProfile?actor=pkrugman.bsky.social"),
+    ("korean mirror feed",  "https://pk2kr.substack.com/feed"),
+    ("youtube channel",     "https://www.youtube.com/@PKrugman"),
+    ("youtube feed",        "https://www.youtube.com/feeds/videos.xml?channel_id="
+                            + YT_CHANNEL),
+    ("youtube feed, ?user", "https://www.youtube.com/feeds/videos.xml?user=PKrugman"),
+    ("x",                   "https://x.com/paulkrugman"),
+    ("project syndicate",   "https://www.project-syndicate.org/columnist/paul-krugman"),
+    ("project syndicate feed", "https://www.project-syndicate.org/rss/"
+                               "author/paul-krugman"),
+    ("nyt column",          "https://www.nytimes.com/column/paul-krugman"),
+    ("nyt blog archive",    "https://archive.nytimes.com/krugman.blogs.nytimes.com/"),
+    ("nyt blog, first post", "https://archive.nytimes.com/"
+                             "krugman.blogs.nytimes.com/2007/09/18/introducing-this-blog/"),
+    ("mit page",            "https://web.mit.edu/krugman/www/"),
+]
+
 
 def get(url, want_json=True):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=40) as r:
         body = r.read().decode("utf-8", "replace")
         return (json.loads(body) if want_json else body), r.status, r.headers
+
+
+def probe(url, tries=2, pause=25):
+    """Status, content type and body for one URL, retried once.
+
+    The retry is the whole point; see the note in the module docstring. A
+    failure that clears on a second attempt was about the client, and
+    reporting the first one as the resource's verdict is how this page came
+    to call a live channel empty.
+    """
+    last = None
+    for attempt in range(1, tries + 1):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=40) as r:
+                body = r.read().decode("utf-8", "replace")
+                return r.status, r.headers.get("Content-Type", "-"), body, attempt
+        except urllib.error.HTTPError as ex:
+            ct = ex.headers.get("Content-Type", "-") if ex.headers else "-"
+            last = (ex.code, ct, "", attempt)
+        except Exception as ex:                     # noqa: BLE001 - report, continue
+            last = ("--", type(ex).__name__ + ": " + str(ex)[:40], "", attempt)
+        if attempt < tries:
+            time.sleep(pause)
+    return last
+
+
+def report_channels():
+    section("Channels: status, content type, and a second try for anything that failed")
+    print("  %-24s %4s  %-34s %s" % ("channel", "code", "content-type", "shape"))
+    for name, url in CHANNELS:
+        status, ctype, body, attempt = probe(url)
+        shape = ""
+        if body:
+            n = len(re.findall(r"<item[ >]", body)) or len(re.findall(r"<entry[ >]", body))
+            if n:
+                shape = "%d items" % n
+            elif body.lstrip().startswith("{"):
+                shape = "%d bytes of JSON" % len(body)
+            else:
+                shape = "%d bytes" % len(body)
+        ok = status == 200
+        if attempt > 1:
+            flag = "  (passed on retry)" if ok else "  (still failing after 2 tries)"
+        else:
+            flag = ""
+        # Only a 200 can be a page wearing a feed's URL. Printing this
+        # against a 404 would be the very mistake the docstring warns
+        # about: reading a status that is about the client as a verdict
+        # on the resource.
+        warn = ""
+        if ok and "xml" not in (ctype or "") and ("feed" in name or "rss" in url):
+            warn = "   <-- 200 but NOT XML: a page wearing a feed's URL"
+        elif not ok and ("feed" in name or "rss" in url):
+            warn = "   <-- a failure, not a verdict: ask again later"
+        print("  %-24s %4s  %-34s %s%s%s" % (
+            name, status, (ctype or "-")[:34], shape, flag, warn))
+
+    section("Every active subscription price")
+    print("  The page quotes $7/$70/$210. The publication's own JSON lists more than")
+    print("  one active pair; print them all rather than picking the one that agrees.")
+    try:
+        _, _, body, _ = probe("https://paulkrugman.substack.com/")
+        plans, seen = [], set()
+        for m in re.finditer(r'"id"\s*:\s*"([a-z0-9]+usd)"[^{}]{0,200}?'
+                             r'"amount"\s*:\s*(\d+)[^{}]{0,120}?'
+                             r'"interval"\s*:\s*"(\w+)"', body):
+            key = m.groups()
+            if key in seen:
+                continue
+            seen.add(key)
+            plans.append(key)
+        for plan_id, amount, interval in plans:
+            print("    %-20s $%-9.2f per %s" % (plan_id, int(amount) / 100, interval))
+        if len({p[1] for p in plans if p[2] == "month"}) > 1:
+            print("    NOTE: two monthly amounts are active at once. Which one a new")
+            print("          subscriber is charged cannot be read from outside, and")
+            print("          finding out means subscribing. Do not guess on the page.")
+    except Exception as ex:                         # noqa: BLE001
+        print("    -- could not read the plans: %s" % ex)
+
+
+def report_links(page="docs/krugman.html"):
+    section("Every outbound link on " + page)
+    try:
+        html = pathlib.Path(page).read_text(encoding="utf-8")
+    except OSError as ex:
+        print("  -- %s" % ex)
+        return
+    urls = sorted({u.replace("&amp;", "&") for u in
+                   re.findall(r'href="(https?://[^"]+)"', html)})
+    skip = ("fonts.googleapis.com", "fonts.gstatic.com", "mpbarbosa.com",
+            "github.com/mpbarbosa", "linkedin.com/in/mpbarbosa",
+            "mpbarbosa.github.io")
+    checked = [u for u in urls if not any(s in u for s in skip)]
+    bad = 0
+    for u in checked:
+        status, _, _, attempt = probe(u, tries=2)
+        if status != 200:
+            bad += 1
+            print("  %-4s %s" % (status, u))
+    print("  %d links checked, %d not 200%s" % (
+        len(checked), bad, " -- every one resolves" if not bad else ""))
 
 
 def walk_archive():
@@ -105,9 +270,23 @@ def main():
     ap.add_argument("--as-of", default=date.today().isoformat(),
                     help="cutoff for year-to-date figures (YYYY-MM-DD)")
     ap.add_argument("--cache", help="read/write the archive JSON here")
+    ap.add_argument("--channels", action="store_true",
+                    help="re-fetch every channel in the page's table, with content "
+                         "types, retries and the active subscription prices")
+    ap.add_argument("--links", action="store_true",
+                    help="follow every outbound link on docs/krugman.html")
     args = ap.parse_args()
     cutoff = date.fromisoformat(args.as_of)
     year = cutoff.year
+
+    # Either of these answers on its own, without the forty-page archive walk,
+    # so that checking a channel does not cost a rate limit.
+    if args.channels or args.links:
+        if args.channels:
+            report_channels()
+        if args.links:
+            report_links()
+        return
 
     if args.cache and os.path.exists(args.cache):
         posts = json.load(open(args.cache))

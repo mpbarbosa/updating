@@ -12,7 +12,7 @@ world, so that I can stay up to date.
 | Dan Moore | Worth following, with a filter. 159 posts on FusionAuth's blog since 2020, two thirds of it dev-rel work worth skipping — but since 2025 a fortnightly stream of long explainers on OAuth, identity standards and agent authorization. No per-author feed. | [index](docs/dan-moore.html) |
 | Andrej Karpathy | Deep, slow. 11 posts in 2025, 3 in 2026. Two live blogs with separate feeds. Excellent for understanding, poor for news. | [index](docs/karpathy.html) |
 | Bright Lights Film Journal | Worth following, by subject. A film journal from 1974, online since 1995, 2,929 articles deep and publishing an essay every four days — but zero reviews, festival reports or news in all of 2026. Feeds for every category and author, all working. 75 articles this year from 62 different writers, and the masthead's own critics have stopped filing. | [index](docs/brightlights.html) |
-| Paul Krugman | Worth following, on the right day. 793 posts in the 702 days since he left the New York Times for Substack: free political commentary on weekdays, and one paid 3,000-word economics essay every Sunday — 42 for 42 in 2026. The economics is the reason to read him and it is the half behind the paywall. One feed, twenty items, sixteen days of memory — and a free back door at the CUNY Stone Center, which reposts whole paid series and carries the lectures. | [index](docs/krugman.html) |
+| Paul Krugman | Worth following, on the right day. 794 posts in the 702 days since he left the New York Times for Substack: free political commentary on weekdays, and one paid 3,000-word economics essay every Sunday — 42 for 42 in 2026. The economics is the reason to read him and it is the half behind the paywall. One feed, twenty items, sixteen days of memory — and a free back door at the CUNY Stone Center, which reposts whole paid series and carries the lectures. | [index](docs/krugman.html) |
 
 ## Feeds worth subscribing to
 
@@ -40,6 +40,11 @@ world, so that I can stay up to date.
   reader, lossy if you check in monthly; prefer a category feed
 - `https://api.substack.com/feed/podcast/277517.rss` — Krugman's podcast and video, and the
   only deep feed on his site: 101 items back to January 2025
+- `https://www.youtube.com/feeds/videos.xml?channel_id=UCjY8KAGllKyZZd2FYF1vbPw` — his
+  YouTube channel, which publishes *more* than the Substack does: 547 videos against 101
+  posts, because the Substack videos get cut into clips. Expect intermittent failures:
+  that endpoint answers a **rate-limited request with 404**, not 429, so a single 404 is
+  not evidence the feed is gone — and is how this channel spent a day recorded as empty
 - `https://paulkrugman.substack.com/feed` — all of Krugman's writing, twenty items. At 33 posts
   a month that is about sixteen days, and there is no category or tag feed to narrow it with
 - `https://stonecenter.gc.cuny.edu/?s=krugman&feed=rss2` — not his site: the CUNY Stone Center,
@@ -128,10 +133,15 @@ python3 tools/karpathy-figures.py --as-of 2026-11-13
 python3 tools/brightlights-figures.py --as-of 2026-11-13
 ```
 
-The first walks the Substack archive, re-fetches every feed the page lists —
-including the three it marks dead — queries the Stone Center, and prints each
+The first walks the Substack archive, queries the Stone Center, and prints each
 figure the page quotes. `--cache FILE` saves the archive so repeated runs do not
-re-walk forty pages.
+re-walk forty pages. `--channels` re-fetches all 25 URLs behind the page's channel
+table — the ones it marks dead included — printing each one's content type beside
+its status and **trying twice**, because a failure that clears on the second
+attempt was about the client, not the resource. It also prints every active
+subscription price, since the publication's own JSON lists two monthly ones and
+there is no way to tell from outside which a new subscriber pays. `--links`
+follows every outbound link on the page.
 
 The second walks all 23 pages of the FusionAuth author page, reads the company
 feed, and reconciles the two slug by slug — which is the check that matters there,
@@ -147,6 +157,14 @@ posts — a script measuring the feed would under-report the year and look right
 it. It also prints each channel's **content type**, since `karpathy.ai/feed.xml` and
 `x.com/karpathy/rss` both answer `200` with `text/html`.
 
+That content-type rule has a second half, learned on the Krugman page: **check whether
+the status is about the resource at all.** YouTube's feed endpoint answers a
+rate-limited request with `404`, not `429`. On 13 November its feed for Krugman's
+547-video channel returned a valid Atom document at 23:26 and `404` from 23:33, while
+two other channels' feeds still answered `200` from the same machine — and six minutes
+later all three were `404`. One probe had already been enough to record a live channel
+as having no uploads and no feed. Ask twice, minutes apart, before believing a failure.
+
 The fourth reads the journal's WordPress REST API, where `X-WP-Total` gives a count
 without downloading anything, so most of its figures cost one small request each. It
 goes through `curl` rather than `urllib`, and that is not a style choice: the host's
@@ -159,7 +177,7 @@ year-to-date numbers will not line up.
 Stdlib only (the Bright Lights one shells out to `curl`, for the reason above), no
 build step, and none of them writes anything into `docs/`.
 
-Both print a little more than the page states, on purpose. Where a figure needs a
+All four print a little more than the page states, on purpose. Where a figure needs a
 judgement — which short Krugman posts are day-off notices, which FusionAuth
 categories belong to which table row — the script lists the items instead of
 bucketing them, because a regex that confidently contradicts the page is worse
