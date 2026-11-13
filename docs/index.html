@@ -3,15 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Updating</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Updating — reading indexes for the sources worth following</title>
 <meta name="description" content="A widget board of the people worth reading to stay current: what is newest, how often each one posts, which feeds to subscribe to, and what to discount.">
+<meta name="author" content="Marcelo Pereira Barbosa">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://mpbarbosa.github.io/updating/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Updating">
+<meta property="og:title" content="Updating &mdash; reading indexes for the sources worth following">
 <meta property="og:description" content="A board of the people worth reading to stay current: what is newest, how often each one posts, and which feeds are actually worth subscribing to.">
 <meta property="og:url" content="https://mpbarbosa.github.io/updating/">
-<meta name="twitter:card" content="summary">
+<meta property="og:site_name" content="Updating">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://mpbarbosa.github.io/updating/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Updating — reading indexes for the sources worth following">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mpbarbosa.github.io/updating/og/home.png">
+<meta name="twitter:image:alt" content="Updating — reading indexes for the sources worth following">
 <!-- Installable: manifest, icons and the iOS standalone metas -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f6cbd" media="(prefers-color-scheme: light)">
@@ -24,6 +35,94 @@
 <meta name="apple-mobile-web-app-title" content="Updating">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="home.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://mpbarbosa.github.io/updating/#author",
+      "name": "Marcelo Pereira Barbosa",
+      "url": "https://www.mpbarbosa.com",
+      "sameAs": [
+        "https://github.com/mpbarbosa",
+        "https://www.linkedin.com/in/mpbarbosa"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mpbarbosa.github.io/updating/#website",
+      "url": "https://mpbarbosa.github.io/updating/",
+      "name": "Updating",
+      "alternateName": "Updating — source indexes",
+      "description": "Independent reading indexes of the people and publications worth following: what each one publishes, how often, and which feeds are worth subscribing to.",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://mpbarbosa.github.io/updating/#author"
+      },
+      "license": "https://github.com/mpbarbosa/updating/blob/main/LICENSE"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://mpbarbosa.github.io/updating/#webpage",
+      "url": "https://mpbarbosa.github.io/updating/",
+      "name": "Updating — reading indexes for the sources worth following",
+      "isPartOf": {
+        "@id": "https://mpbarbosa.github.io/updating/#website"
+      },
+      "about": {
+        "@id": "https://mpbarbosa.github.io/updating/#website"
+      },
+      "inLanguage": "en",
+      "datePublished": "2026-11-09",
+      "dateModified": "2026-11-12",
+      "author": {
+        "@id": "https://mpbarbosa.github.io/updating/#author"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://mpbarbosa.github.io/updating/og/home.png",
+        "width": 1200,
+        "height": 630
+      },
+      "description": "A board of the people worth reading to stay current: what is newest, how often each one posts, and which feeds are worth subscribing to."
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://mpbarbosa.github.io/updating/#sourcelist",
+      "name": "Sources assessed",
+      "numberOfItems": 4,
+      "itemListOrder": "https://schema.org/ItemListUnordered",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "url": "https://mpbarbosa.github.io/updating/dan-moore.html",
+          "name": "Dan Moore source index"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "url": "https://mpbarbosa.github.io/updating/karpathy.html",
+          "name": "Andrej Karpathy source index"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "url": "https://mpbarbosa.github.io/updating/brightlights.html",
+          "name": "Bright Lights Film Journal source index"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "url": "https://mpbarbosa.github.io/updating/krugman.html",
+          "name": "Paul Krugman source index"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <div class="board">
@@ -31,8 +130,9 @@
   <div class="bar">
     <div class="who-badge" aria-hidden="true">UP</div>
     <div class="greet">
-      <h1 id="greeting">Updating</h1>
-      <p>Four sources assessed &middot; last revised 12 November 2026</p>
+      <p class="hello" id="greeting">Updating</p>
+      <h1>Reading indexes for the sources worth following</h1>
+      <p>Four sources assessed &middot; last revised <time datetime="2026-11-12">12 November 2026</time></p>
     </div>
     <div class="search" role="search">
       <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.25"/><path d="M12.5 12.5 17 17"/></svg>

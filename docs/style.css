@@ -180,8 +180,24 @@ footer .me a:hover { text-decoration: underline; }
 
 /* breadcrumb back to the hub */
 .backnav { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.backnav ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.backnav li { display: flex; align-items: center; gap: 0.5rem; color: var(--faint); }
+.backnav li + li::before { content: "/"; color: var(--faint); }
 .backnav a { color: var(--faint); text-decoration: none; }
 .backnav a:hover { color: var(--accent); text-decoration: underline; }
+.backnav [aria-current="page"] { color: var(--muted); }
+
+/* sibling indexes, so no source page is a dead end */
+.siblings { margin-top: 3rem; padding-top: 1.75rem; border-top: 1px solid var(--rule); }
+.siblings h2 { font-family: var(--mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); margin-bottom: 1rem; }
+.siblings ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.siblings li a { display: block; height: 100%; padding: 0.7rem 0.85rem; background: var(--surface); border: 1px solid var(--rule); border-left: 2px solid var(--rule); text-decoration: none; transition: border-color 0.15s ease; }
+.siblings li a:hover { border-left-color: var(--accent); }
+.siblings li b { display: block; font-family: var(--display); font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+.siblings li span { display: block; margin-top: 0.15rem; font-size: 0.78rem; color: var(--faint); }
+.siblings .all { margin-top: 0.9rem; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.siblings .all a { color: var(--faint); text-decoration: none; }
+.siblings .all a:hover { color: var(--accent); text-decoration: underline; }
 
 /* verdict callout */
 .verdict { background: var(--surface); border: 1px solid var(--rule); border-left: 3px solid var(--accent); padding: 1.1rem 1.25rem; margin-top: 1.5rem; }
