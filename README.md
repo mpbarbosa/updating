@@ -11,7 +11,7 @@ world, so that I can stay up to date.
 | --- | --- | --- |
 | Dan Moore | Worth following, with a filter. 159 posts on FusionAuth's blog since 2020, two thirds of it dev-rel work worth skipping — but since 2025 a fortnightly stream of long explainers on OAuth, identity standards and agent authorization. No per-author feed. | [index](docs/dan-moore.html) |
 | Andrej Karpathy | Deep, slow. 11 posts in 2025, 3 in 2026. Two live blogs with separate feeds. Excellent for understanding, poor for news. | [index](docs/karpathy.html) |
-| Bright Lights Film Journal | Worth following, by subject. A film journal from 1974, online since 1995, 2,928 articles deep and publishing an essay every three days — but zero reviews, festival reports or news in all of 2026. Feeds for every category and author, all working. 74 articles this year from 61 different writers, and the masthead's own critics have stopped filing. | [index](docs/brightlights.html) |
+| Bright Lights Film Journal | Worth following, by subject. A film journal from 1974, online since 1995, 2,929 articles deep and publishing an essay every four days — but zero reviews, festival reports or news in all of 2026. Feeds for every category and author, all working. 75 articles this year from 62 different writers, and the masthead's own critics have stopped filing. | [index](docs/brightlights.html) |
 | Paul Krugman | Worth following, on the right day. 793 posts in the 702 days since he left the New York Times for Substack: free political commentary on weekdays, and one paid 3,000-word economics essay every Sunday — 42 for 42 in 2026. The economics is the reason to read him and it is the half behind the paywall. One feed, twenty items, sixteen days of memory — and a free back door at the CUNY Stone Center, which reposts whole paid series and carries the lectures. | [index](docs/krugman.html) |
 
 ## Feeds worth subscribing to
@@ -34,7 +34,7 @@ world, so that I can stay up to date.
 - `https://www.mooreds.com/wordpress/feed` — his personal blog; monthly, and a different
   subject entirely (engineering management and careers, no identity)
 - `https://brightlightsfilm.com/category/essays/feed/` — the Bright Lights label that tracks
-  what the journal is actually doing: 19 of its 74 articles this year. Any category works
+  what the journal is actually doing: 19 of its 75 articles this year. Any category works
   (`/category/<slug>/feed/`), as does any author (`/author/<slug>/feed/`)
 - `https://brightlightsfilm.com/feed/` — the whole journal, ten items deep. Fine for a daily
   reader, lossy if you check in monthly; prefer a category feed
@@ -66,6 +66,7 @@ world, so that I can stay up to date.
   against its sources (see *Checking the figures*)
 - `tools/dan-moore-figures.py` — the same for the Dan Moore page
 - `tools/karpathy-figures.py` — the same for the Karpathy page
+- `tools/brightlights-figures.py` — the same for the Bright Lights page
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
@@ -109,8 +110,7 @@ script to change what a card says.
 
 Every source page states counts, medians and dates, and every one of them was read
 from the source's own API rather than recalled. Those numbers go stale, and a stale
-number on a page about staying current is the worst kind. Three pages have a script
-that re-reads their sources:
+number on a page about staying current is the worst kind. Every source page has a script that re-reads its sources:
 
 ```
 python3 tools/krugman-figures.py --as-of 2026-11-12
@@ -122,6 +122,10 @@ python3 tools/dan-moore-figures.py --as-of 2026-11-13
 
 ```
 python3 tools/karpathy-figures.py --as-of 2026-11-13
+```
+
+```
+python3 tools/brightlights-figures.py --as-of 2026-11-13
 ```
 
 The first walks the Substack archive, re-fetches every feed the page lists —
@@ -143,10 +147,17 @@ posts — a script measuring the feed would under-report the year and look right
 it. It also prints each channel's **content type**, since `karpathy.ai/feed.xml` and
 `x.com/karpathy/rss` both answer `200` with `text/html`.
 
+The fourth reads the journal's WordPress REST API, where `X-WP-Total` gives a count
+without downloading anything, so most of its figures cost one small request each. It
+goes through `curl` rather than `urllib`, and that is not a style choice: the host's
+CDN answers **403 to HTTP/1.1 and 200 to HTTP/2**, whatever User-Agent you send, and
+`urllib` speaks only HTTP/1.1. The failure looks exactly like a blocked scraper.
+
 Reconcile by eye, and pass `--as-of` the cutoff in the page's footer or the
 year-to-date numbers will not line up.
 
-Stdlib only, no build step, and none of them writes anything into `docs/`.
+Stdlib only (the Bright Lights one shells out to `curl`, for the reason above), no
+build step, and none of them writes anything into `docs/`.
 
 Both print a little more than the page states, on purpose. Where a figure needs a
 judgement — which short Krugman posts are day-off notices, which FusionAuth
