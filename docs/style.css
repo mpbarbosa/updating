@@ -169,6 +169,9 @@ td.feed { font-family: var(--mono); font-size: 0.78rem; word-break: break-all; m
 
 footer { padding-top: 2rem; font-size: 0.82rem; color: var(--faint); border-top: 1px solid var(--rule); }
 footer p + p { margin-top: 0.6rem; }
+footer .me { color: var(--muted); }
+footer .me a { font-weight: 600; text-decoration: none; }
+footer .me a:hover { text-decoration: underline; }
 @media (prefers-reduced-motion: no-preference) {
   .bars div { transition: height 0.4s ease; }
 }
