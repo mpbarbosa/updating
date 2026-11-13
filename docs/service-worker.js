@@ -23,7 +23,7 @@
  * the one with the version stamp on it.
  */
 
-const CACHE_VERSION = '2026-11-12c';
+const CACHE_VERSION = '2026-11-13a';
 const CACHE_NAME = `updating-${CACHE_VERSION}`;
 
 /**
