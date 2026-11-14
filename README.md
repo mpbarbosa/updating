@@ -72,9 +72,9 @@ world, so that I can stay up to date.
 - `tools/dan-moore-figures.py` — the same for the Dan Moore page
 - `tools/karpathy-figures.py` — the same for the Karpathy page
 - `tools/brightlights-figures.py` — the same for the Bright Lights page
-- `tools/board-figures.py` — the board states almost nothing of its own, so this
-  one compares rather than measures: the board against the four source pages,
-  plus its own arithmetic (see *Checking the figures*)
+- `tools/derived-figures.py` — the board and the hub state almost nothing of
+  their own, so this one compares rather than measures: both of them against the
+  four source pages, plus the board's own arithmetic (see *Checking the figures*)
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
@@ -137,7 +137,7 @@ python3 tools/brightlights-figures.py --as-of 2026-11-13
 ```
 
 ```
-python3 tools/board-figures.py --live --links
+python3 tools/derived-figures.py --live --links
 ```
 
 The first walks the Substack archive, queries the Stone Center, and prints each
@@ -178,15 +178,29 @@ goes through `curl` rather than `urllib`, and that is not a style choice: the ho
 CDN answers **403 to HTTP/1.1 and 200 to HTTP/2**, whatever User-Agent you send, and
 `urllib` speaks only HTTP/1.1. The failure looks exactly like a blocked scraper.
 
-The fifth is a different kind of check. The board copies its figures from the four
-source pages, so it fails in a way none of the others can see: a source page gets
-corrected and the board keeps the figure that was just overturned. It had done that
-twice by 13 November 2026 — still advertising a 3,700-word median for Bright Lights
-two commits after that page was corrected to 2,500, and still flagging a Dan Moore
-post as "not in feed" after the audit that proved the feed carries all of them. So
-`board-figures.py` compares the board against the source pages, which are the ones
-that were actually measured, and keeps a list of claims known to have been
-overturned.
+The fifth is a different kind of check. Two pages here — the board and the hub —
+copy their figures from the four source pages, so they fail in a way none of the
+others can see: a source page gets corrected and the derived page keeps the figure
+that was just overturned. Both of them had, by 13 November 2026. The board was still
+advertising a 3,700-word median for Bright Lights two commits after that page was
+corrected to 2,500, and still flagging a Dan Moore post as "not in feed" after the
+audit that proved the feed carries all of them. The hub, checked an hour later, was
+still calling his output "a steady fortnightly stream" at "~2 per month" when the
+measured rate is 1.45 — and its feed table had missed the Karpathy channel that had
+just been added to the board and to this file.
+
+So `derived-figures.py` compares both pages against the source pages, which are the
+ones that were actually measured, keeps a list of claims known to have been
+overturned, and checks that the three lists published under *Feeds worth subscribing
+to* — here, on the hub and on the board — have not drifted apart. They are allowed
+to be different lengths; a feed in two of them and missing from the third is an
+omission rather than a choice, and that is what it reports.
+
+With `--live` it also measures the one figure neither derived page can check against
+a source page: Dan Moore's posts per month. His own page states a typical *gap*
+instead, and the two are not the same statistic — the median gap since 2025 really is
+about a fortnight, while two three-month silences pull the rate to 1.45 a month. Both
+derived pages said "~2" until this was measured.
 
 It also re-adds the board's own sums. That is worth doing on its own:
 
