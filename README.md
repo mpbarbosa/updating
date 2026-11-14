@@ -9,7 +9,7 @@ world, so that I can stay up to date.
 
 | Source | Verdict | Page |
 | --- | --- | --- |
-| Dan Moore | Worth following, with a filter. 159 posts on FusionAuth's blog since 2020, two thirds of it dev-rel work worth skipping — but since 2025 a fortnightly stream of long explainers on OAuth, identity standards and agent authorization. No per-author feed. | [index](docs/dan-moore.html) |
+| Dan Moore | Worth following, with a filter. 159 posts on FusionAuth's blog since 2020, two thirds of it dev-rel work worth skipping — but since 2025 a run of long explainers on OAuth, identity standards and agent authorization — a fortnight apart when he is writing, and twice stopped for three months, which is 1.45 a month over the stretch. No per-author feed. | [index](docs/dan-moore.html) |
 | Andrej Karpathy | Deep, slow. 11 posts in 2025, 3 in 2026. Two live blogs with separate feeds. Excellent for understanding, poor for news. | [index](docs/karpathy.html) |
 | Bright Lights Film Journal | Worth following, by subject. A film journal from 1974, online since 1995, 2,929 articles deep and publishing an essay every four days — but zero reviews, festival reports or news in all of 2026. Feeds for every category and author, all working. 75 articles this year from 62 different writers, and the masthead's own critics have stopped filing. | [index](docs/brightlights.html) |
 | Paul Krugman | Worth following, on the right day. 794 posts in the 702 days since he left the New York Times for Substack: free political commentary on weekdays, and one paid 3,000-word economics essay every Sunday — 42 for 42 in 2026. The economics is the reason to read him and it is the half behind the paywall. One feed, twenty items, sixteen days of memory — and a free back door at the CUNY Stone Center, which reposts whole paid series and carries the lectures. | [index](docs/krugman.html) |
@@ -36,8 +36,10 @@ world, so that I can stay up to date.
 - `https://brightlightsfilm.com/category/essays/feed/` — the Bright Lights label that tracks
   what the journal is actually doing: 19 of its 75 articles this year. Any category works
   (`/category/<slug>/feed/`), as does any author (`/author/<slug>/feed/`)
-- `https://brightlightsfilm.com/feed/` — the whole journal, ten items deep. Fine for a daily
-  reader, lossy if you check in monthly; prefer a category feed
+- `https://brightlightsfilm.com/feed/` — the whole journal, ten items deep. At the seven
+  articles a month it has averaged this year that is about six weeks, so a monthly reader
+  loses nothing; it goes lossy at six weeks, or four in a month like September or October
+  when it ran to ten. A category feed is narrower, so it holds your subject for longer
 - `https://api.substack.com/feed/podcast/277517.rss` — Krugman's podcast and video, and the
   only deep feed on his site: 101 items back to January 2025
 - `https://www.youtube.com/feeds/videos.xml?channel_id=UCjY8KAGllKyZZd2FYF1vbPw` — his
@@ -86,8 +88,8 @@ Every indexable page carries a unique `<title>` and meta description, a
 canonical URL, Open Graph and Twitter card tags with a 1200×630 image, and a
 JSON-LD `@graph`. The source pages describe themselves as `Article` with an
 `about` entity for the person or publication being indexed, plus a
-`BreadcrumbList`; the hub pages use `WebSite`/`CollectionPage` and an `ItemList`
-of the four indexes. `docs/sitemap.xml` lists the six indexable pages;
+`BreadcrumbList`. The board is `WebSite`/`WebPage` and the hub `WebSite`/`CollectionPage`;
+both carry an `ItemList` of the four indexes, and the hub a `BreadcrumbList` too. `docs/sitemap.xml` lists the six indexable pages;
 `offline.html` is `noindex` and deliberately absent from it.
 
 Two things are worth knowing:
@@ -121,7 +123,7 @@ from the source's own API rather than recalled. Those numbers go stale, and a st
 number on a page about staying current is the worst kind. Every source page has a script that re-reads its sources:
 
 ```
-python3 tools/krugman-figures.py --as-of 2026-11-12
+python3 tools/krugman-figures.py --as-of 2026-11-13
 ```
 
 ```
@@ -196,6 +198,22 @@ to* — here, on the hub and on the board — have not drifted apart. They are a
 to be different lengths; a feed in two of them and missing from the third is an
 omission rather than a choice, and that is what it reports.
 
+**This file is the third derived surface**, and it went unchecked longest. It repeats
+every source page's headline figures, it is where the feed list is canonical, and it
+describes files, commands and behaviour that change underneath it. So `--page readme`
+also checks that every path named here exists and that nothing shipped goes unnamed;
+that the `--as-of` dates printed below match the cutoff each page states in its own
+footer; that the JSON-LD types described above are the ones the pages declare; and
+that the precache figure matches the bytes the service worker actually lists. On 13
+November 2026 that last one was out by a factor of two — the figure had been written
+when the pages were half their present size, and nothing re-added them.
+
+One wrinkle worth knowing if you edit the overturned-claims list: this section exists
+to *recount* corrections, quoting the wording that was wrong, so scanning the whole
+file reports a document describing its own history as one repeating its own mistakes.
+The check skips from *Checking the figures* to *Installable and offline* for that
+reason, and scans what the file asserts in its own voice.
+
 With `--live` it also measures the one figure neither derived page can check against
 a source page: Dan Moore's posts per month. His own page states a typical *gap*
 instead, and the two are not the same statistic — the median gap since 2025 really is
@@ -212,15 +230,17 @@ posts counted across them    3,901
 That was live for a day. The addends had been corrected one at a time, each time
 correctly, and the total was never re-added — and the Karpathy addend turned out to
 be a two-year count sitting in a row of all-time ones. **Check a derived figure's
-derivation, not only its parts.** `--board PATH` runs the whole check against an
-older copy (`git show HEAD~1:docs/index.html`), which is how you confirm it still
-catches what it claims to; a check nobody has watched fail is not a check.
+derivation, not only its parts.** `--page board|hub|both` picks what to check, and
+`--board PATH` / `--hub PATH` run the whole thing against an older copy
+(`git show HEAD~1:docs/index.html`), which is how you confirm it still catches what it
+claims to; a check nobody has watched fail is not a check.
 
 Reconcile by eye, and pass `--as-of` the cutoff in the page's footer or the
 year-to-date numbers will not line up.
 
-Stdlib only (the Bright Lights one shells out to `curl`, for the reason above), no
-build step, and none of them writes anything into `docs/`.
+Stdlib only. Two of them shell out to `curl`: the Bright Lights one always, for the
+HTTP/2 reason above, and `derived-figures.py` as a fallback when `urllib` cannot
+reach a host. No build step, and none of them writes anything into `docs/`.
 
 All five print a little more than the page states, on purpose. Where a figure needs a
 judgement — which short Krugman posts are day-off notices, which FusionAuth
@@ -239,8 +259,8 @@ desktop, and every page is readable with no connection. There is still no build
 step and no dependency — the manifest and the service worker are two more static
 files in `docs/`.
 
-The service worker precaches the whole site (about 180 KB including the icons)
-and then serves:
+The service worker precaches the whole site — 345 KB as of 13 November 2026, of which
+the two icons are 108 KB — and then serves:
 
 - **navigations** network-first, so a revised board always wins when you are online
 - **stylesheets, images, icons** stale-while-revalidate — instant, and self-healing

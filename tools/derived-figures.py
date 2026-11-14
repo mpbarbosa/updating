@@ -49,6 +49,7 @@ import urllib.request
 DOCS = pathlib.Path(__file__).resolve().parent.parent / "docs"
 BOARD = DOCS / "index.html"
 HUB = DOCS / "sources.html"
+README = DOCS.parent / "README.md"
 
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/141.0 Safari/537.36")
@@ -246,8 +247,21 @@ def check_against_sources(board, rows=None, what="board"):
             bad += 1
     print("\n  %d disagreement(s)" % bad)
 
-    # Claims the board states that a source page has since overturned. These
+    # Claims the page states that a source page has since overturned. These
     # are not figures, so no number comparison would catch them.
+    #
+    # README is the awkward one: its "Checking the figures" section exists to
+    # recount exactly these corrections, quoting the wording that was wrong.
+    # Scanning it whole reports a page describing its own history as a page
+    # repeating its own mistakes -- three false positives on the first run.
+    # So skip the section that is about the checks, and scan what the file
+    # asserts in its own voice.
+    body = board
+    if what == "README":
+        start = body.find("## Checking the figures")
+        end = body.find("## Installable and offline")
+        if 0 <= start < end:
+            body = body[:start] + body[end:]
     section("Claims the source pages have overturned (%s)" % what)
     stale = [
         ("not in feed",
@@ -270,6 +284,13 @@ def check_against_sources(board, rows=None, what="board"):
          "them"),
         ("~2 / month",
          "measured 1.45 a month since 2025 -- see above"),
+        ("fortnightly stream",
+         "true of the median gap and of nothing else: two three-month "
+         "silences put the rate at 1.45 a month. Say which statistic you "
+         "mean"),
+        ("lossy if you check in monthly",
+         "same as 'lossy monthly' below: ten items covers about six weeks "
+         "at this journal's rate"),
         ("lossy monthly",
          "ten items at the seven articles a month Bright Lights has averaged "
          "this year is about six weeks, so a monthly reader loses nothing"),
@@ -278,7 +299,7 @@ def check_against_sources(board, rows=None, what="board"):
     ]
     hits = 0
     for needle, why in stale:
-        if needle in board:
+        if needle in body:
             hits += 1
             print("  FOUND  %r" % needle)
             print("         %s" % why)
@@ -305,6 +326,150 @@ def norm_feed(u):
     u = re.sub(r"^https?://", "", u)
     u = re.sub(r"^www\.", "", u)
     return u.rstrip("/")
+
+
+README_ROWS = [
+    (r"(\d[\d,]*) posts on FusionAuth's blog since 2020", "dan-moore",
+     "posts since 2020", "Dan Moore, posts all-time"),
+    (r"(\d+) posts in 2025, \d+ in 2026", "karpathy",
+     "posts in 2025", "Karpathy, 2025"),
+    (r"\d+ posts in 2025, (\d+) in 2026", "karpathy",
+     "posts in 2026", "Karpathy, 2026"),
+    (r"([\d,]+) articles deep", "brightlights",
+     "posts online", "Bright Lights, posts all-time"),
+    (r"(\d+) articles this year", "brightlights",
+     "posts in 2026 so far", "Bright Lights, 2026"),
+    (r"(\d[\d,]*) posts in the 702 days", "krugman",
+     "posts since Dec 2024", "Krugman, posts since the relaunch"),
+]
+
+
+def check_readme_paths(readme):
+    """Every path README names must exist, and nothing shipped may go unnamed.
+
+    A README is the one file in a repository that nobody re-reads, so a file
+    renamed underneath it stays wrong indefinitely. This is cheap and it is
+    the only check here that can fail from the other direction too: a script
+    added without a line about it.
+    """
+    section("README: the paths it names")
+    root = DOCS.parent
+    named = set(re.findall(r"`((?:docs|tools)/[A-Za-z0-9_.*<>/-]+)`", readme))
+    bad = 0
+    for p in sorted(named):
+        if "*" in p or "<" in p:                 # a glob or a placeholder
+            matches = list(root.glob(p.replace("<source>", "*")))
+            ok = bool(matches)
+            note = "%d match" % len(matches)
+        else:
+            ok = (root / p).exists()
+            note = ""
+        if not ok:
+            bad += 1
+            print("  MISSING  %s" % p)
+        elif note:
+            print("  ok       %-30s %s" % (p, note))
+    print("  %d paths named, %d missing" % (len(named), bad))
+
+    unnamed = []
+    for d in ("docs", "tools"):
+        for f in sorted((root / d).iterdir()):
+            if f.is_dir() or f.name.startswith("."):
+                continue
+            rel = "%s/%s" % (d, f.name)
+            if f.name in readme or rel in readme:
+                continue
+            # a glob counts: README names the icons as docs/icon-*.png
+            if any(f in set(root.glob(g)) for g in named if "*" in g):
+                continue
+            unnamed.append(rel)
+    print("  shipped but not named in README: %s"
+          % (", ".join(unnamed) if unnamed else "none"))
+
+
+def check_readme_commands(readme):
+    """The --as-of dates README prints must match each page's own cutoff.
+
+    README says to pass the cutoff in the page's footer. It then prints four
+    commands with the dates baked in, and those go stale the moment a page is
+    re-measured -- which is how the Krugman line spent a day telling readers
+    to compare against a window the page no longer used.
+    """
+    section("README: the commands it prints")
+    for src in ("krugman", "dan-moore", "karpathy", "brightlights"):
+        m = re.search(r"tools/%s-figures\.py --as-of (\d{4}-\d{2}-\d{2})"
+                      % re.escape(src), readme)
+        page = (DOCS / (src + ".html")).read_text(encoding="utf-8")
+        # the page states its window in its footer, in prose
+        f = re.search(r"(?:1 January to|rechecked(?: against the same sources on)?)"
+                      r" (\d{1,2} Nov(?:ember)?)", page)
+        flag = ""
+        if m and f:
+            try:
+                day = int(f.group(1).split()[0])
+                if int(m.group(1).split("-")[2]) != day:
+                    flag = "   <-- MISMATCH"
+            except (ValueError, IndexError):
+                flag = "   (could not compare)"
+        print("  %-14s README --as-of %s   page says %-12s%s"
+              % (src, m.group(1) if m else "NOT FOUND",
+                 f.group(1) if f else "?", flag))
+    print("\n  README tells the reader to pass the cutoff in the page's footer,")
+    print("  then prints the date inline. The two go out of step silently.")
+
+
+def check_readme_schema(readme):
+    """README describes the JSON-LD each page carries. Check it carries it.
+
+    This is the sort of claim that is written once, is true that day, and is
+    never read again by anyone who could falsify it -- README said the board
+    was a CollectionPage for as long as the board had been a WebPage.
+    """
+    section("README: the JSON-LD types it describes")
+    for page, expect in (("index.html", ("WebSite", "WebPage", "ItemList")),
+                         ("sources.html", ("WebSite", "CollectionPage", "ItemList")),
+                         ("krugman.html", ("Article", "BreadcrumbList"))):
+        t = (DOCS / page).read_text(encoding="utf-8")
+        types = set()
+        for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>',
+                             t, re.S):
+            try:
+                d = json.loads(m.group(1))
+            except ValueError:
+                continue
+            for n in d.get("@graph", [d]):
+                if isinstance(n, dict) and n.get("@type"):
+                    types.add(n["@type"])
+        miss = [x for x in expect if x not in types]
+        print("  %-16s declares %-52s %s"
+              % (page, ", ".join(sorted(types))[:52],
+                 "ok" if not miss else "MISSING " + ", ".join(miss)))
+    named = set(re.findall(r"`(WebSite|WebPage|CollectionPage|ItemList|Article|"
+                           r"BreadcrumbList|Periodical)`", readme))
+    print("  README names: %s" % ", ".join(sorted(named)))
+
+
+def check_readme_precache(readme):
+    """The precache figure against the bytes the service worker actually lists."""
+    section("README: the precache figure")
+    sw = (DOCS / "service-worker.js").read_text(encoding="utf-8")
+    m = re.search(r"PRECACHE\s*=\s*\[(.*?)\]", sw, re.S)
+    if not m:
+        print("  -- could not find the precache list")
+        return
+    seen, total = set(), 0
+    for i in re.findall(r"['\"]([^'\"]+)['\"]", m.group(1)):
+        p = DOCS / i.lstrip("./")
+        if i in ("./", "/", "."):
+            p = DOCS / "index.html"
+        if p.exists() and p not in seen:
+            seen.add(p)
+            total += p.stat().st_size
+    stated = re.search(r"precaches the whole site[^.]*?([\d,]+) ?KB", readme)
+    print("  measured    %.0f KB across %d unique files" % (total / 1024, len(seen)))
+    print("  README says %s KB" % (stated.group(1) if stated else "NOT FOUND"))
+    if stated and abs(num(stated.group(1)) - total / 1024) > 25:
+        print("  MISMATCH    more than 25 KB apart -- the pages have grown")
 
 
 def check_feed_lists(board, hub):
@@ -484,8 +649,9 @@ def main():
                          "every feed, and count Karpathy's archives")
     ap.add_argument("--links", action="store_true",
                     help="follow every outbound link on the page")
-    ap.add_argument("--page", choices=("board", "hub", "both"), default="both",
-                    help="which derived page to check (default: both)")
+    ap.add_argument("--page", choices=("board", "hub", "readme", "both"),
+                    default="both",
+                    help="which derived surface to check (default: all three)")
     ap.add_argument("--board", default=str(BOARD),
                     help="check a different copy of the board -- point it at "
                          "an older revision (git show HEAD~1:docs/index.html) "
@@ -494,6 +660,8 @@ def main():
                          "check.")
     ap.add_argument("--hub", default=str(HUB),
                     help="the same, for the hub (git show HEAD:docs/sources.html)")
+    ap.add_argument("--readme", default=str(README),
+                    help="the same, for README.md")
     args = ap.parse_args()
 
     board = text_of(args.board)
@@ -523,6 +691,17 @@ def main():
         check_feeds(hub, args.live, "hub")
         if args.links:
             check_links(hub, "the hub")
+
+    if args.page in ("readme", "both"):
+        readme = text_of(args.readme)
+        print("\n" + "=" * 68)
+        print("THE README  " + args.readme)
+        print("=" * 68)
+        check_against_sources(readme, README_ROWS, "README")
+        check_readme_paths(readme)
+        check_readme_commands(readme)
+        check_readme_schema(readme)
+        check_readme_precache(readme)
 
     if args.page == "both":
         check_feed_lists(board, hub)
