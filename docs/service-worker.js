@@ -16,14 +16,18 @@
  * it is what evicts the previous cache outright.
  *
  * Note that same-origin requests deliberately bypass the *browser's* HTTP
- * cache (see fromNetwork). Without that, "network-first" is a lie: GitHub Pages
- * serves HTML with max-age=600, so fetch() would hand back a ten-minute-old
- * page without touching the network, and the service worker would then store
- * that as its own idea of fresh. One cache layer is enough, and it should be
- * the one with the version stamp on it.
+ * cache (see fromNetwork, and the cache: 'reload' on the precache). Without
+ * that, "network-first" is a lie: GitHub Pages serves HTML with max-age=600,
+ * so fetch() would hand back a ten-minute-old page without touching the
+ * network, and the service worker would then store that as its own idea of
+ * fresh. One cache layer is enough, and it should be the one with the version
+ * stamp on it.
+ *
+ * Same-origin entries are keyed on the path alone (see put), so a link shared
+ * with ?utm_source= does not file a second copy of the page.
  */
 
-const CACHE_VERSION = '2026-11-13j';
+const CACHE_VERSION = '2026-11-13l';
 const CACHE_NAME = `updating-${CACHE_VERSION}`;
 
 /**
@@ -57,7 +61,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE))
+      // cache: 'reload' for the same reason fromNetwork() exists: addAll()
+      // otherwise uses the browser's HTTP cache, and GitHub Pages serves HTML
+      // with max-age=600. A bumped CACHE_VERSION is meant to mean "take the
+      // site as it is now", and within ten minutes of a deploy it would not
+      // have. Fourteen small files, revalidated once per version.
+      .then((cache) =>
+        cache.addAll(PRECACHE.map((url) => new Request(url, { cache: 'reload' })))
+      )
       .then(() => self.skipWaiting())
       .catch((error) => {
         console.error('[sw] precache failed:', error);
@@ -132,13 +143,30 @@ function fromNetwork(request, mode) {
   );
 }
 
-/** Put a response in the cache without holding up the one being returned. */
+/**
+ * Put a response in the cache without holding up the one being returned.
+ *
+ * Same-origin responses are stored under the URL with any query string
+ * removed. Nothing on this site varies by query — there is no API and no
+ * asset pipeline — but shared links routinely arrive carrying ?utm_source=
+ * and friends, and storing those verbatim means a second full copy of a 38 KB
+ * page per variant, kept until the next version bump. Both lookups already
+ * pass ignoreSearch, so a stripped key is what they were looking for anyway.
+ *
+ * Cross-origin keys are left alone: the Google Fonts stylesheet IS its query
+ * string, and two different ?family= requests are two different files.
+ */
 function put(event, response) {
   const copy = response.clone();
+  const url = new URL(event.request.url);
+  const key =
+    url.origin === self.location.origin && url.search
+      ? new Request(url.origin + url.pathname)
+      : event.request;
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.put(event.request, copy))
+      .then((cache) => cache.put(key, copy))
       .catch((error) => {
         console.warn('[sw] could not cache', event.request.url, error);
       })
@@ -174,7 +202,7 @@ function cacheFirst(event) {
 }
 
 function staleWhileRevalidate(event) {
-  return caches.match(event.request).then((hit) => {
+  return caches.match(event.request, { ignoreSearch: true }).then((hit) => {
     const fresh = fromNetwork(event.request, 'no-cache')
       .then((response) => {
         if (worthCaching(response)) put(event, response);
