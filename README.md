@@ -72,6 +72,9 @@ world, so that I can stay up to date.
 - `tools/dan-moore-figures.py` — the same for the Dan Moore page
 - `tools/karpathy-figures.py` — the same for the Karpathy page
 - `tools/brightlights-figures.py` — the same for the Bright Lights page
+- `tools/board-figures.py` — the board states almost nothing of its own, so this
+  one compares rather than measures: the board against the four source pages,
+  plus its own arithmetic (see *Checking the figures*)
 
 Each source page answers the same questions: where they publish and which channels are
 live, how often they actually post, what they are writing about now, what is worth reading
@@ -133,6 +136,10 @@ python3 tools/karpathy-figures.py --as-of 2026-11-13
 python3 tools/brightlights-figures.py --as-of 2026-11-13
 ```
 
+```
+python3 tools/board-figures.py --live --links
+```
+
 The first walks the Substack archive, queries the Stone Center, and prints each
 figure the page quotes. `--cache FILE` saves the archive so repeated runs do not
 re-walk forty pages. `--channels` re-fetches all 25 URLs behind the page's channel
@@ -171,13 +178,37 @@ goes through `curl` rather than `urllib`, and that is not a style choice: the ho
 CDN answers **403 to HTTP/1.1 and 200 to HTTP/2**, whatever User-Agent you send, and
 `urllib` speaks only HTTP/1.1. The failure looks exactly like a blocked scraper.
 
+The fifth is a different kind of check. The board copies its figures from the four
+source pages, so it fails in a way none of the others can see: a source page gets
+corrected and the board keeps the figure that was just overturned. It had done that
+twice by 13 November 2026 — still advertising a 3,700-word median for Bright Lights
+two commits after that page was corrected to 2,500, and still flagging a Dan Moore
+post as "not in feed" after the audit that proved the feed carries all of them. So
+`board-figures.py` compares the board against the source pages, which are the ones
+that were actually measured, and keeps a list of claims known to have been
+overturned.
+
+It also re-adds the board's own sums. That is worth doing on its own:
+
+```
+posts counted across them    3,901
+2,929 + 800 + 159 + 14       = 3,902
+```
+
+That was live for a day. The addends had been corrected one at a time, each time
+correctly, and the total was never re-added — and the Karpathy addend turned out to
+be a two-year count sitting in a row of all-time ones. **Check a derived figure's
+derivation, not only its parts.** `--board PATH` runs the whole check against an
+older copy (`git show HEAD~1:docs/index.html`), which is how you confirm it still
+catches what it claims to; a check nobody has watched fail is not a check.
+
 Reconcile by eye, and pass `--as-of` the cutoff in the page's footer or the
 year-to-date numbers will not line up.
 
 Stdlib only (the Bright Lights one shells out to `curl`, for the reason above), no
 build step, and none of them writes anything into `docs/`.
 
-All four print a little more than the page states, on purpose. Where a figure needs a
+All five print a little more than the page states, on purpose. Where a figure needs a
 judgement — which short Krugman posts are day-off notices, which FusionAuth
 categories belong to which table row — the script lists the items instead of
 bucketing them, because a regex that confidently contradicts the page is worse
