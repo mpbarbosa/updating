@@ -559,8 +559,11 @@ def check_newest(board):
 
         # What the board's "Latest across all four" list has for this source.
         # That list is grouped by author: a heading names the source once, and
-        # the rows under it carry the date alone, newest first.
-        grp = re.search(r'<p class="grp-head">.*?</i>%s<span class="n">.*?</p>'
+        # the rows under it carry the date alone, newest first. Each group is a
+        # <details> whose <summary> is the heading, so the rows are there to be
+        # read whether or not the group is folded open in a browser.
+        grp = re.search(r'<summary class="grp-head">.*?</i>%s'
+                        r'<span class="n">.*?</summary>'
                         r'\s*<ul>(.*?)</ul>' % re.escape(name), board, re.S)
         dates = re.findall(r'<span class="sub">([^<]+?)(?: <span|</span>)',
                            grp.group(1)) if grp else []
