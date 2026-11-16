@@ -203,6 +203,10 @@ a { color: var(--accent); text-underline-offset: 2px; }
 .tile.s { grid-column: span 1; grid-row: span 2; }
 .tile.wide { grid-column: span 4; grid-row: span 2; }
 .tile.tall { grid-row: span 5; }
+/* the latest-posts tile opens with every group folded, so it only needs room
+   for the four headings; opening one scrolls inside the tile. Two rows also
+   puts it level with the pair of stat tiles beside it. */
+.tile.tall.latest { grid-row: span 2; }
 .tile.hero { grid-column: span 4; grid-row: span 4; padding: 0; }
 
 .t-head {
@@ -283,16 +287,19 @@ a { color: var(--accent); text-underline-offset: 2px; }
 }
 
 /* grouped by author: one heading per source, so the rows carry only the date.
-   The heading sticks to the top of the scroller, which is the only scrolling
-   ancestor here -- on narrow screens the scroller is `overflow: visible`, and
-   the rule below turns the stickiness off so headings cannot float over the
-   page. */
+   Each group is a <details>, so a source can be folded away; the heading is its
+   <summary> and carries the chevron. The heading sticks to the top of the
+   scroller, which is the only scrolling ancestor here -- on narrow screens the
+   scroller is `overflow: visible`, and the rule below turns the stickiness off
+   so headings cannot float over the page. */
 .feedlist.grouped > li, .feedlist.grouped > li:first-child { border-top: 0; }
 .feedlist.grouped > li + li { margin-top: 0.5rem; }
 .feedlist.grouped ul { list-style: none; margin: 0; padding: 0; }
+.grp-box > ul { padding-top: 0.1rem; }
 .grp-head {
   position: sticky; top: 0; z-index: 1;
   display: flex; align-items: center; gap: 0.4rem;
+  cursor: pointer; list-style: none; user-select: none;
   margin: 0 -0.3rem; padding: 0.3rem 0.3rem 0.28rem;
   background: var(--card);
   border-bottom: 1px solid var(--br-strong);
@@ -305,6 +312,22 @@ a { color: var(--accent); text-underline-offset: 2px; }
   color: var(--faint);
   font-variant-numeric: tabular-nums;
 }
+.grp-head::-webkit-details-marker { display: none; }
+.grp-head:hover { color: var(--ink); }
+.grp-head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 4px; }
+/* the chevron: a rotated corner, pointing down when the group is folded away
+   and up when it is open. */
+.grp-head::after {
+  content: "";
+  width: 0.36rem; height: 0.36rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.15s ease;
+  flex: none;
+}
+.grp-box[open] > .grp-head::after { transform: translateY(1px) rotate(-135deg); }
+@media (prefers-reduced-motion: reduce) { .grp-head::after { transition: none; } }
 .feedlist.grouped .sub { margin-top: 0.1rem; }
 
 /* ---------- small stat tiles ---------- */
@@ -409,7 +432,7 @@ a { color: var(--accent); text-underline-offset: 2px; }
 @media (max-width: 40rem) {
   .board { padding-top: 1.1rem; }
   .grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 0.75rem; }
-  .tile, .tile.s, .tile.wide, .tile.tall, .tile.hero { grid-column: span 1; grid-row: auto; }
+  .tile, .tile.s, .tile.wide, .tile.tall, .tile.tall.latest, .tile.hero { grid-column: span 1; grid-row: auto; }
   .tile { min-height: 0; }
   .tile.tall .scroller, .tile .scroller { overflow: visible; }
   .grp-head { position: static; }
