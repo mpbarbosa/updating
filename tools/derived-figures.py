@@ -215,7 +215,7 @@ def check_against_sources(board, rows=None, what="board"):
          "posts online", "Bright Lights, posts all-time"),
         (r'a median ([\d,]+) words', "brightlights",
          "median words", "Bright Lights, median words"),
-        (r'(\d[\d,]*) posts in 702 days', "krugman",
+        (r'(\d[\d,]*) posts in 70\d days', "krugman",
          "posts since Dec 2024", "Krugman, posts since the relaunch"),
         (r'<span class="cnt">([\d.]+) / day</span>', "krugman",
          "posts per day in 2026", "Krugman, posts per day"),
@@ -339,7 +339,7 @@ README_ROWS = [
      "posts online", "Bright Lights, posts all-time"),
     (r"(\d+) articles this year", "brightlights",
      "posts in 2026 so far", "Bright Lights, 2026"),
-    (r"(\d[\d,]*) posts in the 702 days", "krugman",
+    (r"(\d[\d,]*) posts in the 70\d days", "krugman",
      "posts since Dec 2024", "Krugman, posts since the relaunch"),
 ]
 
