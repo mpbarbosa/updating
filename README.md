@@ -127,15 +127,15 @@ python3 tools/krugman-figures.py --as-of 2026-11-16
 ```
 
 ```
-python3 tools/dan-moore-figures.py --as-of 2026-11-13
+python3 tools/dan-moore-figures.py --as-of 2026-11-16
 ```
 
 ```
-python3 tools/karpathy-figures.py --as-of 2026-11-13
+python3 tools/karpathy-figures.py --as-of 2026-11-16
 ```
 
 ```
-python3 tools/brightlights-figures.py --as-of 2026-11-13
+python3 tools/brightlights-figures.py --as-of 2026-11-16
 ```
 
 ```
@@ -259,7 +259,7 @@ desktop, and every page is readable with no connection. There is still no build
 step and no dependency — the manifest and the service worker are two more static
 files in `docs/`.
 
-The service worker precaches the whole site — 345 KB as of 13 November 2026, of which
+The service worker precaches the whole site — 349 KB as of 16 November 2026, of which
 the two icons are 108 KB — and then serves:
 
 - **navigations** network-first, so a revised board always wins when you are online
