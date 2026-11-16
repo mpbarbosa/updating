@@ -27,7 +27,7 @@
  * with ?utm_source= does not file a second copy of the page.
  */
 
-const CACHE_VERSION = '2026-11-13l';
+const CACHE_VERSION = '2026-11-16a';
 const CACHE_NAME = `updating-${CACHE_VERSION}`;
 
 /**

@@ -282,6 +282,31 @@ a { color: var(--accent); text-underline-offset: 2px; }
   border-radius: 3px; padding: 0.05rem 0.3rem;
 }
 
+/* grouped by author: one heading per source, so the rows carry only the date.
+   The heading sticks to the top of the scroller, which is the only scrolling
+   ancestor here -- on narrow screens the scroller is `overflow: visible`, and
+   the rule below turns the stickiness off so headings cannot float over the
+   page. */
+.feedlist.grouped > li, .feedlist.grouped > li:first-child { border-top: 0; }
+.feedlist.grouped > li + li { margin-top: 0.5rem; }
+.feedlist.grouped ul { list-style: none; margin: 0; padding: 0; }
+.grp-head {
+  position: sticky; top: 0; z-index: 1;
+  display: flex; align-items: center; gap: 0.4rem;
+  margin: 0 -0.3rem; padding: 0.3rem 0.3rem 0.28rem;
+  background: var(--card);
+  border-bottom: 1px solid var(--br-strong);
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--ink-2);
+}
+.grp-head .n {
+  margin-left: auto;
+  font-weight: 500; letter-spacing: 0; text-transform: none;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.feedlist.grouped .sub { margin-top: 0.1rem; }
+
 /* ---------- small stat tiles ---------- */
 .tile.s .num { font-family: var(--display); font-size: 2.1rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
 .tile.s .cap { font-size: 0.74rem; color: var(--ink-2); margin-top: 0.3rem; }
@@ -387,6 +412,7 @@ a { color: var(--accent); text-underline-offset: 2px; }
   .tile, .tile.s, .tile.wide, .tile.tall, .tile.hero { grid-column: span 1; grid-row: auto; }
   .tile { min-height: 0; }
   .tile.tall .scroller, .tile .scroller { overflow: visible; }
+  .grp-head { position: static; }
   .hero a.shot { height: 9.5rem; }
   .greet { min-width: 100%; order: -1; }
   .search input { width: 100%; max-width: none; }

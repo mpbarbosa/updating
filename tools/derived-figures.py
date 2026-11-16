@@ -557,10 +557,13 @@ def check_newest(board):
                 re.search(r"(\d{2} [A-Z][a-z]{2}, 20\d{2})", body)
             live = m.group(1).strip() if m else None
 
-        # What the board's "Latest across all four" list has for this source
-        pat = r'<span class="sub"><i class="src-dot \w+"></i>%s &middot; ([^<]+?)(?: <span|</span>)' \
-              % re.escape(name)
-        dates = re.findall(pat, board)
+        # What the board's "Latest across all four" list has for this source.
+        # That list is grouped by author: a heading names the source once, and
+        # the rows under it carry the date alone, newest first.
+        grp = re.search(r'<p class="grp-head">.*?</i>%s<span class="n">.*?</p>'
+                        r'\s*<ul>(.*?)</ul>' % re.escape(name), board, re.S)
+        dates = re.findall(r'<span class="sub">([^<]+?)(?: <span|</span>)',
+                           grp.group(1)) if grp else []
         print("  %-14s source serves %-14s board's newest: %s"
               % (name, live or "?", dates[0].strip() if dates else "NOT LISTED"))
     print("\n  Dates are formatted differently on each side on purpose: read")
